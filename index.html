@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UI5 개발 사례 · 가이드 — would-you</title>
+<meta name="description" content="SAPUI5 · Fiori Elements 화면 개발 사례와 가이드 모음. 직접 구현하며 남긴 매뉴얼형 문서들.">
+<style>
+  :root{
+    --ground:#F6F7F9; --surface:#FFFFFF; --surface-2:#FBFCFD;
+    --ink:#16181D; --ink-soft:#59627A; --ink-faint:#8A93A6;
+    --line:#E4E7EC; --line-soft:#EEF1F5;
+    --accent:#0B5CAB; --accent-deep:#083E76; --accent-wash:#EAF2FB;
+    --risk:#C0392B; --warn:#C77D0A; --ok:#2E7D46;
+    --sap:#0B5CAB; --ai:#6B4FBB; --ui5:#2E7D46; --etc:#8A93A6;
+    --sans:'Pretendard','Pretendard Variable','Apple SD Gothic Neo','Malgun Gothic',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --mono:ui-monospace,'D2Coding','SFMono-Regular',Consolas,'Courier New',monospace;
+    --measure:52rem;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+    font-size:17px;line-height:1.75;letter-spacing:-.003em;
+    word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--measure);margin:0 auto;padding:0 24px}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  a:hover{border-bottom-color:var(--accent)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+  .hero{padding:8vh 0 3rem;border-bottom:1px solid var(--line)}
+  .back{display:inline-block;font-family:var(--mono);font-size:13px;color:var(--ink-faint);
+    border-bottom:1px solid var(--line);margin-bottom:1.6rem}
+  .back:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  .signal{display:flex;gap:7px;margin-bottom:1.4rem}
+  .signal span{width:11px;height:11px;border-radius:50%}
+  .signal .r{background:var(--risk)} .signal .a{background:var(--warn)} .signal .g{background:var(--ok)}
+  .brand{font-family:var(--mono);font-size:13.5px;letter-spacing:.02em;color:var(--accent-deep);font-weight:500}
+  h1{font-size:clamp(38px,6.6vw,64px);line-height:1.04;letter-spacing:-.03em;font-weight:800;margin:.5rem 0 .6rem}
+  .tagline{font-size:clamp(16px,2.3vw,19px);color:var(--ink-soft);font-weight:500;line-height:1.6;max-width:40rem}
+  .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;font-size:14px;color:var(--ink-faint);
+    margin-top:1.7rem;padding-top:1.4rem;border-top:1px solid var(--line-soft)}
+  .meta b{color:var(--ink-soft);font-weight:600}
+
+  section{padding:3.2rem 0;border-bottom:1px solid var(--line)}
+  .eyebrow{display:flex;align-items:center;gap:.6rem;font-size:12.5px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:1.3rem}
+  .eyebrow .count{font-family:var(--mono);font-size:11.5px;background:var(--accent-wash);
+    color:var(--accent-deep);padding:2px 8px;border-radius:6px;font-weight:700;letter-spacing:0}
+
+  .cards{display:grid;grid-template-columns:1fr;gap:1.2rem}
+  @media(min-width:680px){.cards{grid-template-columns:1fr 1fr}}
+  .card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
+    border-radius:16px;overflow:hidden;transition:border-color .15s,box-shadow .15s,transform .15s}
+  .card:hover{border-color:#C7D6E8;box-shadow:0 10px 32px -14px rgba(11,92,171,.32);transform:translateY(-3px)}
+  .card a.card-hit{border:0;color:inherit;display:flex;flex-direction:column;height:100%}
+  .card a.card-hit:hover{border:0}
+  .cover{position:relative;aspect-ratio:16/7;background:
+    radial-gradient(120% 140% at 12% 0%,#188A5E 0%,#2E7D46 45%,#155235 100%);
+    display:flex;align-items:flex-end;padding:16px 18px;color:#fff;overflow:hidden}
+  .cover::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 90% at 88% 18%,rgba(255,255,255,.16),transparent 60%)}
+  .cover.ai{background:radial-gradient(120% 140% at 12% 0%,#7A5CD0 0%,#6B4FBB 45%,#463079 100%)}
+  .cover .cv-tag{position:relative;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+    background:rgba(255,255,255,.16);padding:3px 9px;border-radius:20px;backdrop-filter:blur(2px)}
+  .cover .cv-dots{position:absolute;top:14px;left:18px;display:flex;gap:6px}
+  .cover .cv-dots span{width:9px;height:9px;border-radius:50%;opacity:.95}
+  .card-body{padding:1.15rem 1.3rem 1.4rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+  .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.15rem}
+  .tag{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.02em;padding:2px 8px;border-radius:5px}
+  .tag.sap{background:#EAF2FB;color:var(--sap)} .tag.ai{background:#EFEBFA;color:var(--ai)}
+  .tag.ui5{background:#E7F3EC;color:var(--ui5)}
+  .card-title{font-size:20px;font-weight:750;line-height:1.32;letter-spacing:-.01em;color:var(--ink)}
+  .card-blurb{font-size:14.5px;color:var(--ink-soft);line-height:1.62;flex:1}
+  .card-go{font-size:13.5px;font-weight:700;color:var(--accent);margin-top:.4rem;letter-spacing:.01em}
+  .card:hover .card-go{color:var(--accent-deep)}
+  .soon-note{font-size:14px;color:var(--ink-faint);margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--line-soft)}
+
+  footer{padding:2.6rem 0 4rem;font-size:13.5px;color:var(--ink-faint)}
+  footer .fl{display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;margin-bottom:.6rem}
+  footer a{color:var(--ink-soft);border-bottom:1px solid var(--line)}
+  footer a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="https://would-you-sap.github.io/">← would-you 포탈</a>
+    <div class="signal"><span class="r"></span><span class="a"></span><span class="g"></span></div>
+    <div class="brand">would-you · SAP</div>
+    <h1>UI5</h1>
+    <p class="tagline">SAPUI5 · Fiori Elements 화면을 만드는 실전 사례와 가이드를 모읍니다. 화면 설계부터 구현까지, 직접 만들며 남긴 기록입니다.</p>
+    <div class="meta">
+      <span><b>주제</b> · SAPUI5 / Fiori Elements / FPM</span>
+      <span><b>형식</b> · 사례별 개발기·데모</span>
+      <span><a href="https://github.com/Would-you-sap/ui5">repo ↗</a></span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">사례 · Cases <span class="count">2</span></div>
+
+    <div class="cards" id="grid">
+
+      <div class="card">
+        <a class="card-hit" href="./ai-fiori-dev/">
+          <div class="cover ai">
+            <div class="cv-dots"><span style="background:#FF6B5E"></span><span style="background:#FFD166"></span><span style="background:#7CE0A3"></span></div>
+            <span class="cv-tag">CASE STUDY · 2026-07</span>
+          </div>
+          <div class="card-body">
+            <div class="tags"><span class="tag ui5">UI5</span><span class="tag ai">AI</span></div>
+            <div class="card-title">AI 에이전트와 함께한 SAP Fiori 앱 개발기</div>
+            <p class="card-blurb">“AI가 개발을 어떻게 바꾸는가”를 SAP 개발자 입장에서 직접 검증한 사례. Skill·MCP를 활용해 클린코어 기반 RAP + Fiori 앱을 실제로 구현한 과정과, 그 과정에서 얻은 생각을 정리했습니다. (영상·인터랙티브 데모 포함)</p>
+            <span class="card-go">읽기 →</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="card">
+        <a class="card-hit" href="https://github.com/Would-you-sap/ui5">
+          <div class="cover">
+            <div class="cv-dots"><span style="background:#FF6B5E"></span><span style="background:#FFD166"></span><span style="background:#7CE0A3"></span></div>
+            <span class="cv-tag">DEMO · Fiori Elements</span>
+          </div>
+          <div class="card-body">
+            <div class="tags"><span class="tag ui5">UI5</span></div>
+            <div class="card-title">대리점 매출현황 — FPM Custom Page</div>
+            <p class="card-blurb">SAPUI5 1.149 · Fiori Elements Custom Page(FPM) 조회 데모. KPI·차트·신호등 상태와 값 도움말·인라인 생성까지, mock 데이터로 바로 실행됩니다.</p>
+            <span class="card-go">GitHub에서 보기 →</span>
+          </div>
+        </a>
+      </div>
+
+    </div>
+    <p class="soon-note">UI5 · Fiori 개발 사례를 계속 추가해 나갑니다. 다음 가이드가 준비되는 대로 이곳에 올라옵니다.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fl">
+      <a href="https://would-you-sap.github.io/">← 포탈로</a>
+      <a href="https://github.com/Would-you-sap/ui5">github.com/Would-you-sap/ui5 ↗</a>
+    </div>
+    <div>© 2026 would-you · SAP · AI · UI5 개발 기록</div>
+  </div>
+</footer>
+
+</body>
+</html>

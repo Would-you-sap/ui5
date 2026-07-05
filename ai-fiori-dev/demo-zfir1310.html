@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>ZFIR1310 - 바이어 입금관련 비용 현황 조회 (Design Mockup v2)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f5f6f7; font-size:13px; color:#32363a; }
+
+  :root {
+    --shell: #354a5f;
+    --brand: #0070f2;
+    --brand-hover: #0058c5;
+    --bg: #f5f6f7;
+    --bg-white: #fff;
+    --border: #d9d9d9;
+    --border-light: #e5e5e5;
+    --text: #32363a;
+    --text-light: #6a6d70;
+    --hdr-bg: #f2f2f2;
+    --row-hover: #e8f4fd;
+    --row-selected: #d4e8fa;
+    --lv2-bg: #fafaf4;
+    --totals-bg: #fff3b0;
+    --cost-hdr: #e6f2e0;
+    --cost-sum: #cce5bf;
+    --cost-cell: rgba(230,242,224,.25);
+    --link: #0064d9;
+  }
+
+  .shell {
+    background: var(--shell); height: 44px; display: flex; align-items: center;
+    padding: 0 16px; gap: 12px;
+  }
+  .shell-logo { height: 24px; display: flex; align-items: center; gap: 6px; }
+  .shell-logo-box {
+    background: #fff; color: var(--shell); padding: 2px 6px; border-radius: 3px;
+    font-size: 13px; font-weight: 800; font-style: italic; line-height: 1;
+  }
+  .shell-title { color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500; }
+  .shell-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .shell-right span { color: rgba(255,255,255,.7); font-size: 12px; }
+  .shell-back {
+    width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.1);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; cursor: pointer; border: none;
+  }
+  .shell-back:hover { background: rgba(255,255,255,.2); }
+
+  .toolbar {
+    background: var(--bg-white); padding: 6px 16px; display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tb-select {
+    border: 1px solid var(--border); border-radius: 4px; height: 28px;
+    padding: 0 8px; font-size: 12px; background: #fff; color: var(--text); min-width: 120px;
+  }
+  .tb-link { color: var(--link); font-size: 13px; cursor: pointer; text-decoration: none; font-weight: 500; }
+  .tb-link:hover { text-decoration: underline; }
+  .tb-icon {
+    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    border: none; background: none; cursor: pointer; font-size: 15px; color: var(--text-light); border-radius: 4px;
+  }
+  .tb-icon:hover { background: #eee; }
+  .tb-text { font-size: 13px; color: var(--text); cursor: pointer; }
+  .tb-right { margin-left: auto; }
+  .tb-exit { color: var(--text-light); font-size: 13px; cursor: pointer; }
+
+  .vtabs { display: flex; background: var(--bg-white); padding: 0 16px; border-bottom: 1px solid var(--border); }
+  .vtab {
+    padding: 10px 20px; cursor: pointer; font-size: 13px; color: var(--text-light);
+    border-bottom: 3px solid transparent; font-weight: 500; transition: all .12s;
+  }
+  .vtab:hover { color: var(--text); }
+  .vtab.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
+
+  .sel-card {
+    background: var(--bg-white); margin: 20px 24px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .sel-header {
+    background: var(--hdr-bg); padding: 10px 20px; font-size: 13px; font-weight: 600;
+    border-bottom: 1px solid var(--border-light); color: var(--text);
+  }
+  .sel-fields { padding: 24px 28px; }
+  .sel-row { display: flex; align-items: center; margin-bottom: 10px; }
+  .sel-lbl { width: 170px; font-size: 13px; color: var(--text); text-align: right; padding-right: 16px; }
+  .sel-input {
+    border: 1px solid var(--border); border-radius: 4px; background: #fff;
+    padding: 6px 10px; font-size: 13px; height: 32px; width: 140px;
+    font-family: inherit; color: var(--text); outline: none;
+  }
+  .sel-input:focus { border-color: var(--brand); box-shadow: 0 0 0 2px rgba(0,112,242,.12); }
+  .sel-to { margin: 0 8px; color: var(--text-light); }
+  .sel-multi {
+    width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 0 4px 4px 0;
+    background: #fafafa; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    margin-left: -1px; color: var(--link); font-size: 14px;
+  }
+  .sel-note { font-size: 12px; color: #cc0000; font-weight: 600; margin-left: 20px; }
+  .sel-note-bk { font-size: 12px; color: var(--text-light); margin-left: 20px; }
+
+  .action-bar {
+    background: var(--bg-white); padding: 10px 20px; display: flex; justify-content: flex-end; gap: 8px;
+    border-top: 1px solid var(--border-light); position: sticky; bottom: 0;
+  }
+  .btn {
+    padding: 8px 24px; border-radius: 4px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; font-family: inherit; transition: all .12s;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { background: var(--brand-hover); }
+  .btn-ghost { background: none; color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: #f5f5f5; }
+
+  .alv-area { background: var(--bg); }
+  .alv-icons {
+    background: var(--bg-white); padding: 4px 12px; display: flex; align-items: center; gap: 2px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .alv-ic {
+    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid transparent; background: none; cursor: pointer;
+    font-size: 14px; color: var(--text-light); border-radius: 4px;
+  }
+  .alv-ic:hover { background: #eee; border-color: var(--border); }
+  .alv-ic-sep { width: 8px; }
+  .alv-ic-dd { font-size: 10px; margin-left: -4px; color: #aaa; }
+  .alv-txt-btn {
+    height: 28px; border: 1px solid var(--border); border-radius: 4px; background: #fff;
+    padding: 0 12px; font-size: 12px; cursor: pointer; font-family: inherit; color: var(--text);
+  }
+  .alv-txt-btn:hover { background: #f0f0f0; }
+  .alv-post-btn {
+    height: 28px; border: none; border-radius: 4px; background: var(--brand); color: #fff;
+    padding: 0 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .alv-post-btn:hover { background: var(--brand-hover); }
+
+  .alv-scroll { overflow-x: auto; overflow-y: auto; max-height: 520px; background: var(--bg-white); }
+  .t { width: max-content; border-collapse: collapse; font-size: 12px; }
+  .t th {
+    background: var(--hdr-bg); border-right: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border); padding: 6px 10px;
+    font-weight: 500; text-align: left; white-space: nowrap;
+    position: sticky; top: 0; z-index: 10; color: var(--text); font-size: 11px;
+  }
+  .t th.r { text-align: right; }
+  .t th.c { text-align: center; }
+  .t th.ch { background: var(--cost-hdr); }
+  .t th.chs { background: var(--cost-sum); font-weight: 700; }
+  .t td {
+    border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0;
+    padding: 4px 10px; white-space: nowrap; height: 28px; vertical-align: middle;
+  }
+  .chk { width: 28px; text-align: center; }
+  .chk input { width: 15px; height: 15px; cursor: pointer; accent-color: var(--brand); }
+  .lv1 { background: #fff; }
+  .lv1:hover { background: var(--row-hover); }
+  .lv2 { background: var(--lv2-bg); }
+  .lv2:hover { background: #f0f0e0; }
+  .lv2 td { font-size: 11px; color: #555; }
+  .lv2i { padding-left: 28px !important; }
+  .lv2r {
+    display: inline-block; padding: 1px 8px; border-radius: 4px;
+    font-size: 10px; background: #e8f0fb; color: var(--brand); font-weight: 600;
+  }
+  .totals { background: var(--totals-bg) !important; }
+  .totals td { font-weight: 700; border-top: 2px solid var(--border); }
+  .n { text-align: right; font-family: Consolas, 'Courier New', monospace; font-variant-numeric: tabular-nums; }
+  .lk { color: var(--link); cursor: pointer; }
+  .lk:hover { text-decoration: underline; }
+  .exp {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 4px; font-size: 11px;
+    cursor: pointer; user-select: none; color: var(--text-light);
+    border: 1px solid var(--border); background: #fff;
+  }
+  .exp:hover { background: var(--row-hover); border-color: var(--brand); color: var(--brand); }
+  .cc { background: var(--cost-cell); }
+
+  .psep {
+    padding: 16px; display: flex; align-items: center; justify-content: center; gap: 12px; background: var(--bg);
+  }
+  .psep-line { flex: 1; height: 1px; background: var(--border); }
+  .psep-arr {
+    width: 32px; height: 32px; background: var(--brand); color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .bbar {
+    background: var(--bg-white); padding: 6px 16px; font-size: 11px; color: var(--text-light);
+    display: flex; justify-content: space-between; border-top: 1px solid var(--border-light);
+  }
+  .leg {
+    padding: 6px 16px; background: var(--bg-white); font-size: 11px;
+    display: flex; gap: 20px; color: var(--text-light); border-top: 1px solid var(--border-light);
+  }
+  .lb { width: 14px; height: 14px; display: inline-block; border: 1px solid var(--border);
+    vertical-align: middle; margin-right: 5px; border-radius: 2px; }
+
+  .spec-ref {
+    display: inline-block; padding: 0 4px; border-radius: 3px; font-size: 9px;
+    background: #f0f0f0; color: #999; margin-left: 4px; font-weight: 400; font-family: monospace;
+  }
+  .th-group {
+    background: var(--hdr-bg); text-align: center; font-weight: 600; font-size: 11px;
+    border-right: 1px solid var(--border-light); border-bottom: 1px solid var(--border);
+    padding: 4px 10px; color: var(--text);
+  }
+  .th-group.ch { background: var(--cost-hdr); }
+
+  .posted { color: #107e3e; font-weight: 600; }
+  .not-posted { color: #ccc; font-style: italic; }
+
+  .alv-mode-btn {
+    height: 28px; border: 1px solid var(--border); border-radius: 4px; background: #fff;
+    padding: 0 14px; font-size: 12px; cursor: pointer; font-family: inherit; color: var(--text);
+    font-weight: 500;
+  }
+  .alv-mode-btn:hover { background: #f0f0f0; }
+  .alv-mode-btn.active {
+    background: var(--brand); color: #fff; border-color: var(--brand); font-weight: 600;
+  }
+  .mode-group {
+    display: inline-flex; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+  }
+  .mode-group .mg-btn {
+    height: 28px; border: none; border-right: 1px solid var(--border-light); background: #fff;
+    padding: 0 14px; font-size: 12px; cursor: pointer; font-family: inherit; color: var(--text);
+  }
+  .mode-group .mg-btn:last-child { border-right: none; }
+  .mode-group .mg-btn:hover { background: #f0f0f0; }
+  .mode-group .mg-btn.active { background: var(--brand); color: #fff; font-weight: 600; }
+
+  .flat-row { background: #fff; }
+  .flat-row:hover { background: var(--row-hover); }
+  .flat-row:nth-child(even) { background: #fafbfc; }
+  .flat-row:nth-child(even):hover { background: var(--row-hover); }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <button class="shell-back" title="Back">&#9666;</button>
+  <div class="shell-logo"><span class="shell-logo-box">SAP</span></div>
+  <div class="shell-title">ZFIR1310 - &#48148;&#51060;&#50612; &#51077;&#44552;&#44288;&#47144; &#48708;&#50857; &#54788;&#54889; &#51312;&#54924;</div>
+  <div class="shell-right">
+    <span>1000 / SW00</span>
+    <span>UZ</span>
+  </div>
+</div>
+
+<div class="toolbar">
+  <select class="tb-select"><option></option></select>
+  <span class="tb-link">Save as Variant...</span>
+  <button class="tb-icon" title="Layout">&#8862;</button>
+  <span class="tb-text">More &#9662;</span>
+  <span class="tb-right"></span>
+  <span class="tb-exit">Exit</span>
+</div>
+
+<div class="vtabs">
+  <div class="vtab active" onclick="showV('sel')">Selection Screen</div>
+  <div class="vtab" onclick="showV('alv')">ALV Report (&#51077;&#44552; &#49345;&#49464;)</div>
+  <div class="vtab" onclick="showV('both')">&#51204;&#52404; Flow</div>
+</div>
+
+<div id="vSel" style="min-height:500px;">
+  <div class="sel-card">
+    <div class="sel-header">ZFIR1310 &#48148;&#51060;&#50612; &#51077;&#44552;&#44288;&#47144; &#48708;&#50857; &#54788;&#54889; &#51312;&#54924;</div>
+    <div class="sel-fields">
+      <div class="sel-row">
+        <span class="sel-lbl">Company Code <span class="spec-ref">BUKRS</span></span>
+        <input class="sel-input" value="1000" style="width:80px;">
+        <span class="sel-note">&#54596;&#49688; (Default = 1000)</span>
+      </div>
+      <div class="sel-row">
+        <span class="sel-lbl">Document Date <span class="spec-ref">BLDAT</span></span>
+        <input class="sel-input" value="2026.04.01">
+        <span class="sel-to">~</span>
+        <input class="sel-input" value="2026.04.30">
+        <span class="sel-note-bk">Possible Entry (&#51613;&#48729;&#51068; &#44592;&#51456;)</span>
+      </div>
+      <div class="sel-row">
+        <span class="sel-lbl">Posting Date <span class="spec-ref">BUDAT</span></span>
+        <input class="sel-input" value="">
+        <span class="sel-to">~</span>
+        <input class="sel-input" value="">
+        <span class="sel-note-bk">Possible Entry</span>
+      </div>
+      <div class="sel-row">
+        <span class="sel-lbl">Document Type <span class="spec-ref">BLART</span></span>
+        <input class="sel-input" value="D1" style="border-radius:4px 0 0 4px;">
+        <button class="sel-multi" title="Multiple Selection">&#8862;</button>
+        <span class="sel-note">&#54596;&#49688; (Default = D1,D2,D3,D4,D5)</span>
+      </div>
+    </div>
+  </div>
+  <div class="action-bar">
+    <button class="btn btn-primary" onclick="showV('alv')">&#9654; Execute (F8)</button>
+  </div>
+</div>
+
+<div id="vAlv" style="display:none;">
+  <div class="alv-area">
+    <div class="alv-icons">
+      <button class="alv-ic" title="Find">&#128269;</button>
+      <button class="alv-ic" title="Sort Asc">&#8593;</button>
+      <button class="alv-ic" title="Sort Desc">&#8595;</button>
+      <button class="alv-ic" title="Filter">&#9707;</button>
+      <div class="alv-ic-sep"></div>
+      <button class="alv-ic" title="Sum">&Sigma;</button><span class="alv-ic-dd">&#9662;</span>
+      <button class="alv-ic" title="Subtotal">&#189;</button><span class="alv-ic-dd">&#9662;</span>
+      <div class="alv-ic-sep"></div>
+      <button class="alv-ic" title="Export">&#8594;</button>
+      <div class="alv-ic-sep"></div>
+      <div class="mode-group" id="modeGrp1">
+        <button class="mg-btn active" onclick="setMode(1,'hier')">&#9776; &#44228;&#52789;&#54805;</button>
+        <button class="mg-btn" onclick="setMode(1,'flat')">&#9776; &#49345;&#49464; &#47532;&#49828;&#53944;</button>
+      </div>
+      <div class="alv-ic-sep"></div>
+      <span id="hierBtns1">
+        <button class="alv-txt-btn" onclick="expandAll()">&#9660; &#51204;&#52404; &#54196;&#52824;&#44592;</button>
+        <button class="alv-txt-btn" onclick="collapseAll()">&#9654; &#51204;&#52404; &#51217;&#44592;</button>
+      </span>
+      <div class="alv-ic-sep"></div>
+      <button class="alv-post-btn" onclick="postAlert()">&#9881; &#51204;&#54364;&#44592;&#54364;</button>
+    </div>
+    <div class="alv-scroll">
+      <table class="t"><thead id="h1"></thead><tbody id="b1"></tbody></table>
+    </div>
+    <div class="leg" id="leg1">
+      <span><span class="lb" style="background:#fff;"></span>1&#47112;&#48296;: &#51077;&#44552;&#51204;&#54364; &#45800;&#50948; (&#52404;&#53356; &#8594; &#51204;&#54364;&#44592;&#54364; &#45824;&#49345;)</span>
+      <span><span class="lb" style="background:var(--lv2-bg);"></span>2&#47112;&#48296;: Sales Group / Article &#48176;&#48516; (&#47588;&#52636;&#48708;&#50984; &#44592;&#51456;)</span>
+      <span><span class="lb" style="background:var(--cost-hdr);"></span>&#48708;&#50857; &#52980;&#47100; (&#44228;&#51221;&#48324;)</span>
+      <span><span class="lb" style="background:var(--cost-sum);"></span>NEGO&#48708;&#50857;&#44228; (1~7 &#54633;&#44228;)</span>
+      <span><span class="lb" style="background:var(--totals-bg);"></span>&#54633;&#44228;&#54665;</span>
+      <span style="margin-left:auto;font-weight:600;color:var(--brand);">&#9776; &#44228;&#52789;&#54805;: &#54196;&#52824;&#44592;/&#51217;&#44592; | &#49345;&#49464; &#47532;&#49828;&#53944;: 2&#47112;&#48296; &#54540;&#47019; &#52636;&#47141;</span>
+    </div>
+    <div class="bbar">
+      <span>5&#44148; &#51077;&#44552;&#51204;&#54364; / 11&#44148; &#47588;&#52636;&#48176;&#48516;</span>
+      <span>ZFIR1310 | BUKRS: 1000 | 2026.04.01 ~ 2026.04.30</span>
+    </div>
+  </div>
+  <div class="action-bar">
+    <button class="btn btn-ghost" onclick="showV('sel')">&#9664; Back to Selection</button>
+  </div>
+</div>
+
+<div id="vBoth" style="display:none;">
+  <div class="sel-card" style="margin:16px 24px 0;">
+    <div class="sel-header">Selection Screen</div>
+    <div class="sel-fields">
+      <div class="sel-row">
+        <span class="sel-lbl">Company Code:</span>
+        <input class="sel-input" value="1000" readonly style="width:80px;">
+      </div>
+      <div class="sel-row">
+        <span class="sel-lbl">Document Date:</span>
+        <input class="sel-input" value="2026.04.01" readonly>
+        <span class="sel-to">~</span>
+        <input class="sel-input" value="2026.04.30" readonly>
+      </div>
+      <div class="sel-row">
+        <span class="sel-lbl">Document Type:</span>
+        <input class="sel-input" value="D1" readonly style="border-radius:4px 0 0 4px;">
+        <button class="sel-multi">&#8862;</button>
+        <span class="sel-note">D1,D2,D3,D4,D5</span>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:right;padding:8px 24px;">
+    <button class="btn btn-primary">&#9654; Execute (F8)</button>
+  </div>
+  <div class="psep">
+    <div class="psep-line"></div>
+    <div class="psep-arr">&#9660;</div>
+    <span style="font-weight:600;color:var(--text-light);">STEP 1~3 &#45936;&#51060;&#53552; &#52628;&#52636; &#54980; ALV &#54364;&#49884;</span>
+    <div class="psep-arr">&#9660;</div>
+    <div class="psep-line"></div>
+  </div>
+  <div class="alv-area">
+    <div class="alv-icons">
+      <button class="alv-ic">&#128269;</button><button class="alv-ic">&#8593;</button>
+      <button class="alv-ic">&#8595;</button><button class="alv-ic">&#9707;</button>
+      <div class="alv-ic-sep"></div>
+      <button class="alv-ic">&Sigma;</button><span class="alv-ic-dd">&#9662;</span>
+      <button class="alv-ic">&#189;</button><span class="alv-ic-dd">&#9662;</span>
+      <div class="alv-ic-sep"></div>
+      <button class="alv-ic">&#8594;</button>
+      <div class="alv-ic-sep"></div>
+      <button class="alv-txt-btn" onclick="expandAll2()">&#9660; &#54196;&#52824;&#44592;</button>
+      <button class="alv-txt-btn" onclick="collapseAll2()">&#9654; &#51217;&#44592;</button>
+      <div class="alv-ic-sep"></div>
+      <button class="alv-post-btn" onclick="postAlert()">&#9881; &#51204;&#54364;&#44592;&#54364;</button>
+    </div>
+    <div class="alv-scroll" style="max-height:380px;">
+      <table class="t"><thead id="h2"></thead><tbody id="b2"></tbody></table>
+    </div>
+    <div class="leg">
+      <span><span class="lb" style="background:#fff;"></span>1&#47112;&#48296;: &#51077;&#44552;&#51204;&#54364;</span>
+      <span><span class="lb" style="background:var(--lv2-bg);"></span>2&#47112;&#48296;: &#47588;&#52636;&#48176;&#48516;</span>
+      <span><span class="lb" style="background:var(--cost-hdr);"></span>&#48708;&#50857;</span>
+      <span><span class="lb" style="background:var(--totals-bg);"></span>&#54633;&#44228;</span>
+    </div>
+    <div class="bbar">
+      <span>5&#44148; &#51077;&#44552;&#51204;&#54364; / 11&#44148; &#48176;&#48516;</span>
+      <span>ZFIR1310 | 1000</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const D=[
+  {
+    id:1,
+    blart:'D1', belnr:'1400000007', bldat:'2026.04.03', bktxt:'',
+    kidno:'', kunnr:'0000100003', waers:'USD',
+    kunag:'0000100003', kunag_nm:'Target',
+    fkdat:'', zterm:'',
+    wrbtr_pay:'108,400.00', dmbtr_pay:'1,647,362',
+    wrbtr_bil:'434,397.00', dc:'', fn:'',
+    dmbtr_bil:'6,598,604',
+    cost:['1,519','100.00','1,519','100.00','1,519','100.00','2,502','7,058','0'],
+    hbkid:'05370', banka:'KR',
+    posted:'',
+    ch:[
+      {vkgrp:'111',vkgrp_nm:'1 team',artnr:'27KON-JU1002G',
+       ratio:'98.1%', amt:'425,997.00', amt_krw:'6,470,042',
+       cost:['1,490','98.07','1,490','98.07','1,490','98.07','2,453','6,922','0']},
+      {vkgrp:'111',vkgrp_nm:'1 team',artnr:'27KGS-BU002G',
+       ratio:'1.9%', amt:'8,400.00', amt_krw:'128,562',
+       cost:['29','1.93','29','1.93','29','1.93','48','136','0']}
+    ]
+  },
+  {
+    id:2,
+    blart:'D1', belnr:'1400000011', bldat:'2026.04.08', bktxt:'NEGO-2604-002',
+    kidno:'INV-KJ2604-002', kunnr:'0000100003', waers:'USD',
+    kunag:'0000100003', kunag_nm:'TARGET CORP.',
+    fkdat:'2026.03.28', zterm:'TT 90D A/SIGHT',
+    wrbtr_pay:'425,997.00', dmbtr_pay:'647,099,442',
+    wrbtr_bil:'438,200.00', dc:'5,100.00', fn:'433,100.00',
+    dmbtr_bil:'665,634,600',
+    cost:['8,267,400','5,443.92','1,798,080','1,183.80','321,274','211.54','185,000','10,571,754','1,068,512'],
+    hbkid:'105370', banka:'외환(마포)',
+    posted:'',
+    ch:[
+      {vkgrp:'1311',vkgrp_nm:'영업1팀',artnr:'27WIN-SS2501A',
+       ratio:'38.2%', amt:'162,731.00', amt_krw:'247,270,359',
+       cost:['3,158,147','2,079.58','687,067','452.22','122,727','80.81','70,670','4,118,611','408,172']},
+      {vkgrp:'1320',vkgrp_nm:'영업2팀',artnr:'27MER-FW2503B',
+       ratio:'61.8%', amt:'263,266.00', amt_krw:'399,829,083',
+       cost:['5,109,253','3,364.34','1,111,013','731.58','198,547','130.73','114,330','6,453,143','660,340']}
+    ]
+  },
+  {
+    id:3,
+    blart:'D2', belnr:'1400000013', bldat:'2026.04.12', bktxt:'NEGO-2604-003',
+    kidno:'INV-KJ2604-003', kunnr:'0000600002', waers:'USD',
+    kunag:'0000600002', kunag_nm:'WALMART INC.',
+    fkdat:'2026.04.01', zterm:'OA 120D A/SIGHT',
+    wrbtr_pay:'312,450.00', dmbtr_pay:'474,587,250',
+    wrbtr_bil:'320,800.00', dc:'', fn:'',
+    dmbtr_bil:'487,275,200',
+    cost:['6,120,000','4,030.00','1,320,000','869.00','235,800','155.20','320,000','7,995,800','2,300,000'],
+    hbkid:'105370', banka:'외환(마포)',
+    posted:'',
+    ch:[
+      {vkgrp:'1311',vkgrp_nm:'영업1팀',artnr:'27KON-FW2504C',
+       ratio:'33.3%', amt:'104,055.85', amt_krw:'158,060,839',
+       cost:['2,037,960','1,341.99','439,560','289.38','78,511','51.68','106,560','2,662,591','765,900']},
+      {vkgrp:'1320',vkgrp_nm:'영업2팀',artnr:'27MER-SS2502D',
+       ratio:'41.5%', amt:'129,666.75', amt_krw:'196,953,608',
+       cost:['2,539,800','1,672.45','547,800','360.64','97,857','64.41','132,800','3,318,257','954,500']},
+      {vkgrp:'1330',vkgrp_nm:'영업3팀',artnr:'27ACE-FW2501E',
+       ratio:'25.2%', amt:'78,727.40', amt_krw:'119,572,803',
+       cost:['1,542,240','1,015.56','332,640','218.98','59,432','39.11','80,640','2,014,952','579,600']}
+    ]
+  },
+  {
+    id:4,
+    blart:'D3', belnr:'1400000014', bldat:'2026.04.18', bktxt:'NEGO-2604-004',
+    kidno:'INV-KJ2604-004', kunnr:'0000100003', waers:'EUR',
+    kunag:'0000100003', kunag_nm:'TARGET CORP.',
+    fkdat:'2026.04.05', zterm:'TT 45D A/SIGHT',
+    wrbtr_pay:'78,500.00', dmbtr_pay:'129,525,000',
+    wrbtr_bil:'80,200.00', dc:'1,800.00', fn:'78,400.00',
+    dmbtr_bil:'132,330,000',
+    cost:['1,890,000','1,244.70','420,000','276.60','75,000','49.40','0','2,385,000','650,000'],
+    hbkid:'105371', banka:'국민(여의도)',
+    posted:'',
+    ch:[
+      {vkgrp:'1320',vkgrp_nm:'영업2팀',artnr:'27MER-FW2503B',
+       ratio:'58.0%', amt:'45,530.00', amt_krw:'75,124,500',
+       cost:['1,096,200','721.93','243,600','160.43','43,500','28.65','0','1,383,300','377,000']},
+      {vkgrp:'1330',vkgrp_nm:'영업3팀',artnr:'27ACE-SS2505F',
+       ratio:'42.0%', amt:'32,970.00', amt_krw:'54,400,500',
+       cost:['793,800','522.77','176,400','116.17','31,500','20.75','0','1,001,700','273,000']}
+    ]
+  },
+  {
+    id:5,
+    blart:'D1', belnr:'1400000016', bldat:'2026.04.25', bktxt:'NEGO-2604-005',
+    kidno:'INV-KJ2604-005', kunnr:'0000600002', waers:'USD',
+    kunag:'0000600002', kunag_nm:'WALMART INC.',
+    fkdat:'2026.04.10', zterm:'TT 60D A/SHIP',
+    wrbtr_pay:'156,200.00', dmbtr_pay:'237,263,800',
+    wrbtr_bil:'160,500.00', dc:'', fn:'',
+    dmbtr_bil:'243,799,500',
+    cost:['2,980,000','1,962.40','645,000','424.70','115,200','75.88','0','3,740,200','0'],
+    hbkid:'105370', banka:'외환(마포)',
+    posted:'',
+    ch:[
+      {vkgrp:'1311',vkgrp_nm:'영업1팀',artnr:'27KON-JU1002G',
+       ratio:'100%', amt:'156,200.00', amt_krw:'237,263,800',
+       cost:['2,980,000','1,962.40','645,000','424.70','115,200','75.88','0','3,740,200','0']}
+    ]
+  }
+];
+
+const TOT={
+  wrbtr_pay:'1,081,547.00', dmbtr_pay:'1,490,122,854',
+  wrbtr_bil:'1,434,097.00', dmbtr_bil:'1,535,637,904',
+  cost:['19,258,919','12,781.02','4,184,599','2,854.10','748,793','592.02','507,502','24,699,813','4,018,512']
+};
+
+let e1={}, e2={};
+let mode1='hier', mode2='hier';
+
+function z(v){ return (!v||v==='0'||v==='0.00')?'':v; }
+
+const TH=`<tr>
+  <th class="c chk" rowspan="2"><input type="checkbox" onchange="ta(this)"></th>
+  <th class="c" rowspan="2" style="width:24px;"></th>
+  <th rowspan="2">전표유형<br><span class="spec-ref">R61</span></th>
+  <th rowspan="2">전표번호<br><span class="spec-ref">R62</span></th>
+  <th rowspan="2">NEGO일자<br><span class="spec-ref">R64</span></th>
+  <th rowspan="2">NEGO번호<br><span class="spec-ref">R65</span></th>
+  <th rowspan="2">INVOICE_NO<br><span class="spec-ref">R66</span></th>
+  <th rowspan="2">CUSTOMER<br><span class="spec-ref">R67</span></th>
+  <th rowspan="2">BUYER Code<br><span class="spec-ref">R68</span></th>
+  <th rowspan="2">BUYER명<br><span class="spec-ref">R69</span></th>
+  <th rowspan="2" style="background:var(--lv2-bg);">Sales Group<br><span class="spec-ref">R70</span></th>
+  <th rowspan="2" style="background:var(--lv2-bg);">Sales Group명<br><span class="spec-ref">R71</span></th>
+  <th rowspan="2" style="background:var(--lv2-bg);">Generic Article<br><span class="spec-ref">R72</span></th>
+  <th rowspan="2">통화<br><span class="spec-ref">R73</span></th>
+  <th class="r" rowspan="2">매출할인 반영 전<br>매출액(입금)<br><span class="spec-ref">R74</span></th>
+  <th class="r" rowspan="2">매출할인 반영 전<br>매출액(매출)<br><span class="spec-ref">R76</span></th>
+  <th class="r" rowspan="2">매출할인<br><span class="spec-ref">R77</span></th>
+  <th class="r" rowspan="2">매출할인 반영 후<br>최종매출액<br><span class="spec-ref">R78</span></th>
+  <th class="r" rowspan="2">NEGO원화금액<br><span class="spec-ref">R79</span></th>
+  <th class="r" rowspan="2">매출원화금액<br><span class="spec-ref">R80</span></th>
+  <th rowspan="2">선적일자<br><span class="spec-ref">R81</span></th>
+  <th rowspan="2">결재구분명<br><span class="spec-ref">R82</span></th>
+  <th class="r ch" colspan="2">매출채권처분손실<br><span class="spec-ref">560310</span></th>
+  <th class="r ch" colspan="2">입금수수료<br><span class="spec-ref">432550</span></th>
+  <th class="r ch" colspan="2">LESS CHARGE<br><span class="spec-ref">432660</span></th>
+  <th class="r ch">입금지연이자<br><span class="spec-ref">561150</span></th>
+  <th class="r chs" rowspan="2">NEGO비용계<br><span class="spec-ref">R90</span></th>
+  <th class="r ch" rowspan="2">CLAIM(#4581)<br><span class="spec-ref">432410</span></th>
+  <th rowspan="2">전표번호<br>(기표결과)</th>
+  <th rowspan="2">NEGO은행<br><span class="spec-ref">R92</span></th>
+  <th rowspan="2">NEGO은행명<br><span class="spec-ref">R93</span></th>
+</tr>
+<tr>
+  <th class="r ch">원화<span class="spec-ref">R83</span></th>
+  <th class="r ch">외화<span class="spec-ref">R84</span></th>
+  <th class="r ch">원화<span class="spec-ref">R85</span></th>
+  <th class="r ch">외화<span class="spec-ref">R86</span></th>
+  <th class="r ch">원화<span class="spec-ref">R87</span></th>
+  <th class="r ch">외화<span class="spec-ref">R88</span></th>
+  <th class="r ch">원화<span class="spec-ref">R89</span></th>
+</tr>`;
+
+function R(bi,hi,em){
+  if(hi) document.getElementById(hi).innerHTML=TH;
+  const tb=document.getElementById(bi), ek=bi==='b1'?'e1':'e2';
+  tb.innerHTML='';
+
+  D.forEach(r=>{
+    const ex=em[r.id], tr=document.createElement('tr');
+    tr.className='lv1';
+    tr.ondblclick=()=>{ em[r.id]=!em[r.id]; R(bi,null,em); };
+
+    const postedHtml = r.posted
+      ? `<span class="posted">${r.posted}</span>`
+      : `<span class="not-posted">-</span>`;
+
+    tr.innerHTML=`
+      <td class="chk"><input type="checkbox" class="rc"></td>
+      <td style="text-align:center;"><span class="exp" onclick="event.stopPropagation();${ek}[${r.id}]=!${ek}[${r.id}];R('${bi}',null,${ek})">${ex?'&#9662;':'&#9656;'}</span></td>
+      <td>${r.blart}</td>
+      <td><span class="lk">${r.belnr}</span></td>
+      <td>${r.bldat}</td>
+      <td>${r.bktxt}</td>
+      <td>${r.kidno}</td>
+      <td>${r.kunag}</td>
+      <td>${r.kunnr}</td>
+      <td>${r.kunag_nm}</td>
+      <td></td><td></td><td></td>
+      <td>${r.waers}</td>
+      <td class="n">${r.wrbtr_pay}</td>
+      <td class="n">${r.wrbtr_bil}</td>
+      <td class="n">${z(r.dc)}</td>
+      <td class="n">${z(r.fn)}</td>
+      <td class="n">${r.dmbtr_pay}</td>
+      <td class="n">${r.dmbtr_bil}</td>
+      <td>${r.fkdat}</td>
+      <td>${r.zterm}</td>
+      <td class="n cc">${r.cost[0]}</td>
+      <td class="n cc">${r.cost[1]}</td>
+      <td class="n cc">${r.cost[2]}</td>
+      <td class="n cc">${r.cost[3]}</td>
+      <td class="n cc">${r.cost[4]}</td>
+      <td class="n cc">${r.cost[5]}</td>
+      <td class="n cc">${z(r.cost[6])}</td>
+      <td class="n cc" style="font-weight:700;">${r.cost[7]}</td>
+      <td class="n cc">${z(r.cost[8])}</td>
+      <td>${postedHtml}</td>
+      <td>${r.hbkid}</td>
+      <td>${r.banka}</td>`;
+    tb.appendChild(tr);
+
+    if(ex && r.ch) r.ch.forEach(ch=>{
+      const t2=document.createElement('tr');
+      t2.className='lv2';
+      t2.innerHTML=`
+        <td></td><td></td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="lv2i" style="font-weight:600;">${ch.vkgrp}</td>
+        <td>${ch.vkgrp_nm}</td>
+        <td style="font-weight:600;">${ch.artnr}</td>
+        <td style="text-align:center;"><span class="lv2r">${ch.ratio}</span></td>
+        <td class="n" colspan="4" style="text-align:center;color:#aaa;font-size:10px;font-style:italic;">
+          매출비율 ${ch.ratio} 기준 배분
+        </td>
+        <td></td><td></td><td></td><td></td>
+        <td class="n cc">${ch.cost[0]}</td>
+        <td class="n cc">${ch.cost[1]}</td>
+        <td class="n cc">${ch.cost[2]}</td>
+        <td class="n cc">${ch.cost[3]}</td>
+        <td class="n cc">${ch.cost[4]}</td>
+        <td class="n cc">${ch.cost[5]}</td>
+        <td class="n cc">${z(ch.cost[6])}</td>
+        <td class="n cc" style="font-weight:700;">${ch.cost[7]}</td>
+        <td class="n cc">${z(ch.cost[8])}</td>
+        <td></td><td></td><td></td>`;
+      tb.appendChild(t2);
+    });
+  });
+
+  const tt=document.createElement('tr'); tt.className='totals';
+  tt.innerHTML=`
+    <td></td><td></td><td colspan="2" style="text-align:center;">합계 (5건)</td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td class="n">${TOT.wrbtr_pay}</td>
+    <td class="n">${TOT.wrbtr_bil}</td>
+    <td></td><td></td>
+    <td class="n">${TOT.dmbtr_pay}</td>
+    <td class="n">${TOT.dmbtr_bil}</td>
+    <td></td><td></td>
+    <td class="n">${TOT.cost[0]}</td>
+    <td class="n">${TOT.cost[1]}</td>
+    <td class="n">${TOT.cost[2]}</td>
+    <td class="n">${TOT.cost[3]}</td>
+    <td class="n">${TOT.cost[4]}</td>
+    <td class="n">${TOT.cost[5]}</td>
+    <td class="n">${z(TOT.cost[6])}</td>
+    <td class="n">${TOT.cost[7]}</td>
+    <td class="n">${TOT.cost[8]}</td>
+    <td></td><td></td><td></td>`;
+  tb.appendChild(tt);
+}
+
+const TH_FLAT=`<tr>
+  <th class="c chk" rowspan="2"><input type="checkbox" onchange="ta(this)"></th>
+  <th rowspan="2">전표유형</th>
+  <th rowspan="2">전표번호</th>
+  <th rowspan="2">NEGO일자</th>
+  <th rowspan="2">NEGO번호</th>
+  <th rowspan="2">INVOICE_NO</th>
+  <th rowspan="2">CUSTOMER</th>
+  <th rowspan="2">BUYER Code</th>
+  <th rowspan="2">BUYER명</th>
+  <th rowspan="2">Sales Group</th>
+  <th rowspan="2">Sales Group명</th>
+  <th rowspan="2">Generic Article</th>
+  <th rowspan="2">통화</th>
+  <th class="r" rowspan="2">매출금액(외화)</th>
+  <th class="r" rowspan="2">매출금액(원화)</th>
+  <th class="r" rowspan="2">배분비율</th>
+  <th rowspan="2">선적일자</th>
+  <th rowspan="2">결재구분명</th>
+  <th class="r ch" colspan="2">매출채권처분손실<br><span class="spec-ref">560310</span></th>
+  <th class="r ch" colspan="2">입금수수료<br><span class="spec-ref">432550</span></th>
+  <th class="r ch" colspan="2">LESS CHARGE<br><span class="spec-ref">432660</span></th>
+  <th class="r ch">입금지연이자<br><span class="spec-ref">561150</span></th>
+  <th class="r chs" rowspan="2">NEGO비용계</th>
+  <th class="r ch" rowspan="2">CLAIM(#4581)</th>
+  <th rowspan="2">전표번호<br>(기표결과)</th>
+  <th rowspan="2">NEGO은행</th>
+  <th rowspan="2">NEGO은행명</th>
+</tr>
+<tr>
+  <th class="r ch">원화</th><th class="r ch">외화</th>
+  <th class="r ch">원화</th><th class="r ch">외화</th>
+  <th class="r ch">원화</th><th class="r ch">외화</th>
+  <th class="r ch">원화</th>
+</tr>`;
+
+function RF(bi,hi){
+  document.getElementById(hi).innerHTML=TH_FLAT;
+  const tb=document.getElementById(bi);
+  tb.innerHTML='';
+  let totalRows=0;
+
+  D.forEach(r=>{
+    if(!r.ch) return;
+    r.ch.forEach(ch=>{
+      totalRows++;
+      const postedHtml = r.posted
+        ? `<span class="posted">${r.posted}</span>`
+        : `<span class="not-posted">-</span>`;
+
+      const tr=document.createElement('tr');
+      tr.className='flat-row';
+      tr.innerHTML=`
+        <td class="chk"><input type="checkbox" class="rc"></td>
+        <td>${r.blart}</td>
+        <td><span class="lk">${r.belnr}</span></td>
+        <td>${r.bldat}</td>
+        <td>${r.bktxt}</td>
+        <td>${r.kidno}</td>
+        <td>${r.kunag}</td>
+        <td>${r.kunnr}</td>
+        <td>${r.kunag_nm}</td>
+        <td style="font-weight:600;">${ch.vkgrp}</td>
+        <td>${ch.vkgrp_nm}</td>
+        <td style="font-weight:600;">${ch.artnr}</td>
+        <td>${r.waers}</td>
+        <td class="n">${ch.amt}</td>
+        <td class="n">${ch.amt_krw}</td>
+        <td class="n" style="color:var(--brand);font-weight:600;">${ch.ratio}</td>
+        <td>${r.fkdat}</td>
+        <td>${r.zterm}</td>
+        <td class="n cc">${ch.cost[0]}</td>
+        <td class="n cc">${ch.cost[1]}</td>
+        <td class="n cc">${ch.cost[2]}</td>
+        <td class="n cc">${ch.cost[3]}</td>
+        <td class="n cc">${ch.cost[4]}</td>
+        <td class="n cc">${ch.cost[5]}</td>
+        <td class="n cc">${z(ch.cost[6])}</td>
+        <td class="n cc" style="font-weight:700;">${ch.cost[7]}</td>
+        <td class="n cc">${z(ch.cost[8])}</td>
+        <td>${postedHtml}</td>
+        <td>${r.hbkid}</td>
+        <td>${r.banka}</td>`;
+      tb.appendChild(tr);
+    });
+  });
+
+  const tt=document.createElement('tr'); tt.className='totals';
+  tt.innerHTML=`
+    <td></td><td></td><td colspan="2" style="text-align:center;">합계 (${totalRows}건)</td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td><td></td>
+    <td class="n">${TOT.cost[0]}</td><td class="n">${TOT.cost[1]}</td>
+    <td class="n">${TOT.cost[2]}</td><td class="n">${TOT.cost[3]}</td>
+    <td class="n">${TOT.cost[4]}</td><td class="n">${TOT.cost[5]}</td>
+    <td class="n">${z(TOT.cost[6])}</td>
+    <td class="n">${TOT.cost[7]}</td><td class="n">${TOT.cost[8]}</td>
+    <td></td><td></td><td></td>`;
+  tb.appendChild(tt);
+}
+
+function setMode(viewNum, mode){
+  if(viewNum===1){
+    mode1=mode;
+    document.querySelectorAll('#modeGrp1 .mg-btn').forEach((b,i)=>{
+      b.classList.toggle('active',(mode==='hier'&&i===0)||(mode==='flat'&&i===1));
+    });
+    document.getElementById('hierBtns1').style.display = mode==='hier'?'':'none';
+    if(mode==='hier') R('b1','h1',e1);
+    else RF('b1','h1');
+  }
+}
+
+function expandAll(){ D.forEach(d=>e1[d.id]=true); R('b1',null,e1); }
+function collapseAll(){ e1={}; R('b1',null,e1); }
+function expandAll2(){ D.forEach(d=>e2[d.id]=true); R('b2',null,e2); }
+function collapseAll2(){ e2={}; R('b2',null,e2); }
+
+function ta(el){ document.querySelectorAll('.rc').forEach(c=>c.checked=el.checked); }
+
+function postAlert(){
+  const n=document.querySelectorAll('.rc:checked').length;
+  if(!n) alert('전표기표할 행을 선택해주세요.');
+  else alert(
+    `선택된 ${n}건 → 매출비율 기준 비용 대체전표 생성\n\n`+
+    `[전표기표 상세]\n`+
+    `- 전표유형: F0 (비용 대체)\n`+
+    `- 참조(XBLNR): 입금비용대체 ZFIR1310\n`+
+    `- 차변(40): 비용계정 + PA필드(VKORG,VKGRP,ARTNR 등)\n`+
+    `- 대변(50): 동일계정 + 원 C/C\n`+
+    `- BAPI: BAPI_ACC_DOCUMENT_POST\n`+
+    `- 로그: ZFIT1301~1304`
+  );
+}
+
+function showV(v){
+  ['vSel','vAlv','vBoth'].forEach(id=>document.getElementById(id).style.display='none');
+  document.querySelectorAll('.vtab').forEach((t,i)=>{
+    t.classList.toggle('active',(v==='sel'&&i===0)||(v==='alv'&&i===1)||(v==='both'&&i===2));
+  });
+  if(v==='sel') document.getElementById('vSel').style.display='';
+  if(v==='alv'){
+    document.getElementById('vAlv').style.display='';
+    if(mode1==='hier') R('b1','h1',e1);
+    else RF('b1','h1');
+  }
+  if(v==='both'){ document.getElementById('vBoth').style.display=''; R('b2','h2',e2); }
+}
+
+window.onload=()=>{ e1[1]=true; e2[1]=true; e2[2]=true; };
+</script>
+</body>
+</html>
