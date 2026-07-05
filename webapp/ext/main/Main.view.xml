@@ -1,0 +1,90 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:macros="sap.fe.macros"
+    xmlns:l="sap.ui.layout" xmlns:viz="sap.viz.ui5.controls" xmlns:vizdata="sap.viz.ui5.data"
+    xmlns:vizfeeds="sap.viz.ui5.controls.common.feeds"
+    controllerName="would.you.agency.ext.main.Main">
+    <f:DynamicPage id="OverviewPage" class="sapUiResponsiveContentPadding">
+        <f:title>
+            <f:DynamicPageTitle id="OverviewPageTitle">
+                <f:heading>
+                    <Title id="OverviewTitle" text="{i18n>overviewTitle}" level="H2"/>
+                </f:heading>
+                <f:expandedContent>
+                    <!-- ui5con2023형 상위 레코드 타일: 여신잔액 상위 3개 대리점을 OData에 직접 바인딩.
+                         신호등(Critical) 색상 + 추세 화살표 + 클릭 시 해당 대리점 ObjectPage로 이동. -->
+                    <HeaderContainer id="TopAgencyTiles" scrollStep="240" showDividers="false"
+                        content="{path: '/Agency', length: 3, filters: [{path: 'AgencyStatus', operator: 'EQ', value1: 'A'}], parameters: {$orderby: 'CurrentCreditBal desc', $select: 'CustomerId,CustomerName,CustomerTypeName,CurrentCreditBal,CreditBalTrend,Critical,AgencyStatus'}}">
+                        <GenericTile header="{CustomerName}" subheader="{CustomerTypeName}" press=".onTilePress" class="sapUiTinyMarginEnd">
+                            <TileContent unit="{i18n>unitKrw}" footer="{i18n>topTileFooter}">
+                                <NumericContent withMargin="false"
+                                    value="{path: 'CurrentCreditBal', targetType: 'any', formatter: '.formatTileValue'}"
+                                    scale="{path: 'CurrentCreditBal', targetType: 'any', formatter: '.formatTileScale'}"
+                                    indicator="{path: 'CreditBalTrend', targetType: 'any', formatter: '.formatTileIndicator'}"
+                                    valueColor="{path: 'Critical', targetType: 'any', formatter: '.formatTileColor'}"/>
+                            </TileContent>
+                        </GenericTile>
+                    </HeaderContainer>
+                </f:expandedContent>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader id="OverviewPageHeader" pinnable="true">
+                <VBox id="FilterBarBox">
+                    <macros:FilterBar id="FilterBar" metaPath="@com.sap.vocabularies.UI.v1.SelectionFields"/>
+                </VBox>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <VBox id="ContentBox">
+                <l:Grid id="MainGrid" hSpacing="1" defaultSpan="L6 M12 S12">
+                    <macros:Table id="AgencyTable" metaPath="@com.sap.vocabularies.UI.v1.LineItem" readOnly="true"
+                        filterBar="FilterBar" isSearchable="false">
+                        <macros:layoutData>
+                            <l:GridData id="TableGridData" span="XL7 L7 M12 S12"/>
+                        </macros:layoutData>
+                    </macros:Table>
+                    <VBox id="ChartBox">
+                        <layoutData>
+                            <l:GridData id="ChartGridData" span="XL5 L5 M12 S12"/>
+                        </layoutData>
+                        <Panel id="ChartCreditPanel" headerText="{i18n>chartCreditTitle}" class="sapUiSmallMarginBottom">
+                            <viz:VizFrame id="ChartCredit" vizType="column" width="100%" height="13.5rem" uiConfig="{applicationSet:'fiori'}">
+                                <viz:dataset>
+                                    <vizdata:FlattenedDataset id="ChartCreditDs" data="{kpi>/chart}">
+                                        <vizdata:dimensions>
+                                            <vizdata:DimensionDefinition id="ChartCreditDim" name="Agency" value="{kpi>CustomerName}"/>
+                                        </vizdata:dimensions>
+                                        <vizdata:measures>
+                                            <vizdata:MeasureDefinition id="ChartCreditMeasure" name="Occupancy" value="{kpi>OccupancyLevel}"/>
+                                        </vizdata:measures>
+                                    </vizdata:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <vizfeeds:FeedItem id="ChartCreditFeedValue" uid="valueAxis" type="Measure" values="Occupancy"/>
+                                    <vizfeeds:FeedItem id="ChartCreditFeedCat" uid="categoryAxis" type="Dimension" values="Agency"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </Panel>
+                        <Panel id="ChartReceivablePanel" headerText="{i18n>chartReceivableTitle}">
+                            <viz:VizFrame id="ChartReceivable" vizType="column" width="100%" height="13.5rem" uiConfig="{applicationSet:'fiori'}">
+                                <viz:dataset>
+                                    <vizdata:FlattenedDataset id="ChartReceivableDs" data="{kpi>/chart}">
+                                        <vizdata:dimensions>
+                                            <vizdata:DimensionDefinition id="ChartReceivableDim" name="Agency" value="{kpi>CustomerName}"/>
+                                        </vizdata:dimensions>
+                                        <vizdata:measures>
+                                            <vizdata:MeasureDefinition id="ChartReceivableMeasure" name="Receivable" value="{kpi>EndOfMonthBal}"/>
+                                        </vizdata:measures>
+                                    </vizdata:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <vizfeeds:FeedItem id="ChartReceivableFeedValue" uid="valueAxis" type="Measure" values="Receivable"/>
+                                    <vizfeeds:FeedItem id="ChartReceivableFeedCat" uid="categoryAxis" type="Dimension" values="Agency"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </Panel>
+                    </VBox>
+                </l:Grid>
+            </VBox>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

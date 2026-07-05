@@ -1,0 +1,11 @@
+<!-- 세부정보 폼(FieldGroup#DeepDive) 커스텀 필드: 대리점 상태 스위치.
+     켬=승인(A) / 끔=보류(H). 표시모드 비활성(회색), 편집모드에서만 토글.
+     ⚠ Form(ColumnLayout) 의 필드는 sap.ui.core.IFormContent 를 구현한 컨트롤만 유효.
+       HBox 는 미구현 → 구 UI5 시스템에서 'not a valid Form content' 오류로 ObjectPage 가 깨진다.
+       Switch 는 IFormContent 구현체이므로 단일 Switch 로 구성(customTextOn/Off 가 승인/보류 표시).
+     저장 시 AgencyObjectPage.controller 의 onBeforeSave 가 IsApproved → AgencyStatus 로 동기화. -->
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <Switch id="AgencyStatusSwitch" state="{IsApproved}"
+        customTextOn="{i18n>statusApprovedShort}" customTextOff="{i18n>statusHoldShort}"
+        enabled="{ui>/isEditable}"/>
+</core:FragmentDefinition>

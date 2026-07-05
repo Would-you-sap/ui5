@@ -1,0 +1,51 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:vizdata="sap.viz.ui5.data"
+    xmlns:vizfeeds="sap.viz.ui5.controls.common.feeds">
+    <l:Grid defaultSpan="L8 M12 S12" hSpacing="1" class="sapUiSmallMarginTop">
+        <Panel id="TrendPanel" headerText="{i18n>trendChartTitle}">
+            <layoutData>
+                <l:GridData span="L8 M12 S12"/>
+            </layoutData>
+            <viz:VizFrame id="TrendChart" vizType="line" width="100%" height="20rem" uiConfig="{applicationSet:'fiori'}">
+                <viz:dataset>
+                    <vizdata:FlattenedDataset id="TrendDs" data="{detail>/trend}">
+                        <vizdata:dimensions>
+                            <vizdata:DimensionDefinition id="TrendDim" name="매출기간" value="{detail>FiscalPeriod}"/>
+                        </vizdata:dimensions>
+                        <vizdata:measures>
+                            <vizdata:MeasureDefinition id="TrendSalesMeasure" name="월총매출" value="{detail>TotalMonthlySales}"/>
+                            <vizdata:MeasureDefinition id="TrendCollMeasure" name="월총수금" value="{detail>TotalMonthlyCollection}"/>
+                        </vizdata:measures>
+                    </vizdata:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <vizfeeds:FeedItem id="TrendFeedValue" uid="valueAxis" type="Measure" values="월총매출,월총수금"/>
+                    <vizfeeds:FeedItem id="TrendFeedCat" uid="categoryAxis" type="Dimension" values="매출기간"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </Panel>
+        <VBox id="RankBox">
+            <layoutData>
+                <l:GridData span="L4 M12 S12"/>
+            </layoutData>
+            <Panel id="WorstPanel" headerText="{i18n>worstMonthTitle}" class="sapUiTinyMarginBottom">
+                <List id="WorstList" items="{detail>/worst}" showSeparators="Inner">
+                    <StandardListItem id="WorstItem" title="{detail>FiscalPeriod}"
+                        info="{path:'detail>RecoveryRate', type:'sap.ui.model.type.Float', formatOptions:{maxFractionDigits:1}} %"
+                        infoState="Error"/>
+                </List>
+            </Panel>
+            <Panel id="BestPanel" headerText="{i18n>bestMonthTitle}">
+                <List id="BestList" items="{detail>/best}" showSeparators="Inner">
+                    <StandardListItem id="BestItem" title="{detail>FiscalPeriod}"
+                        info="{path:'detail>RecoveryRate', type:'sap.ui.model.type.Float', formatOptions:{maxFractionDigits:1}} %"
+                        infoState="Success"/>
+                </List>
+            </Panel>
+        </VBox>
+    </l:Grid>
+</core:FragmentDefinition>

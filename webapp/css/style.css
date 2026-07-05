@@ -1,0 +1,6 @@
+/* sap.viz VizFrame: plotArea.window 를 first~lastDataPoint 로 고정해 전 기간을 항상 표시하므로
+   카테고리 축 스크롤바는 기능이 없다(썸 100%). viz 에는 이를 숨기는 공식 속성이 없어
+   앱 CSS 로 잔여 chrome 만 제거한다. (차트 데이터/상호작용에는 영향 없음) */
+.sapVizFrame .v-m-axisScrollbar {
+    display: none;
+}

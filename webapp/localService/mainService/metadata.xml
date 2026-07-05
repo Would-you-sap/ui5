@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="Core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Measures.V1.xml">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="AgencyService" Alias="SAP__self">
+            <EntityType Name="Agency">
+                <Key>
+                    <PropertyRef Name="CustomerId"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="CustomerId" Type="Edm.String" MaxLength="10" Nullable="false"/>
+                <Property Name="CustomerName" Type="Edm.String" MaxLength="40"/>
+                <Property Name="RepresentativeName" Type="Edm.String" MaxLength="40"/>
+                <Property Name="StartDate" Type="Edm.Date"/>
+                <Property Name="CustomerTypeName" Type="Edm.String" MaxLength="20"/>
+                <Property Name="SalesTypeName" Type="Edm.String" MaxLength="20"/>
+                <Property Name="SalesRepName" Type="Edm.String" MaxLength="40"/>
+                <Property Name="SalesRepDepartmentName" Type="Edm.String" MaxLength="40"/>
+                <Property Name="LogisticsCenter" Type="Edm.String" MaxLength="40"/>
+                <Property Name="Address" Type="Edm.String" MaxLength="60"/>
+                <Property Name="CurrentCreditBal" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="TotalCreditLimit" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="CurrentCollateral" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="EndOfMonthBal" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="OccupancyLevel" Type="Edm.Decimal" Precision="6" Scale="1"/>
+                <Property Name="CollateralType" Type="Edm.String" MaxLength="20"/>
+                <Property Name="CollateralAmount" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="Critical" Type="Edm.Int32"/>
+                <Property Name="CreditBalTrend" Type="Edm.Int32"/>
+                <Property Name="CreditBalPrevMonth" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="AgencyStatus" Type="Edm.String" MaxLength="1"/>
+                <Property Name="AgencyStatusName" Type="Edm.String" MaxLength="10"/>
+                <Property Name="AgencyStatusCriticality" Type="Edm.Int32"/>
+                <Property Name="ReviewRequired" Type="Edm.Boolean"/>
+                <Property Name="IsApproved" Type="Edm.Boolean"/>
+                <Property Name="IsNotTerminated" Type="Edm.Boolean"/>
+                <Property Name="IconUrl" Type="Edm.String" MaxLength="60"/>
+                <Property Name="CurrencyCode" Type="Edm.String" MaxLength="5"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false"/>
+                <NavigationProperty Name="_Monthly" Type="Collection(AgencyService.Monthly)" Partner="_Agency"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="AgencyService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="AgencyService.Agency"/>
+            </EntityType>
+            <EntityType Name="Monthly">
+                <Key>
+                    <PropertyRef Name="CustomerMonthlyUuid"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="CustomerMonthlyUuid" Type="Edm.String" MaxLength="24" Nullable="false"/>
+                <Property Name="CustomerId" Type="Edm.String" MaxLength="10"/>
+                <Property Name="FiscalPeriod" Type="Edm.String" MaxLength="7"/>
+                <Property Name="SalesPeriodDate" Type="Edm.Date"/>
+                <Property Name="TotalMonthlySales" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="TotalMonthlyCollection" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="CurrentOutBalance" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="EndOfMonthBal" Type="Edm.Decimal" Precision="15" Scale="0"/>
+                <Property Name="RotationDays" Type="Edm.Decimal" Precision="4" Scale="1"/>
+                <Property Name="RecoveryRate" Type="Edm.Decimal" Precision="4" Scale="1"/>
+                <Property Name="Critical" Type="Edm.Int32"/>
+                <Property Name="CurrencyCode" Type="Edm.String" MaxLength="5"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false"/>
+                <NavigationProperty Name="_Agency" Type="AgencyService.Agency" Partner="_Monthly">
+                    <ReferentialConstraint Property="CustomerId" ReferencedProperty="CustomerId"/>
+                </NavigationProperty>
+                <NavigationProperty Name="DraftAdministrativeData" Type="AgencyService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="AgencyService.Monthly"/>
+            </EntityType>
+            <!-- 값 도움말(Value Help) 엔티티 — ui5con2023의 마스터데이터 VH(고객/항공사/항공편) 대응 -->
+            <EntityType Name="StatusVH">
+                <Key><PropertyRef Name="Code"/></Key>
+                <Property Name="Code" Type="Edm.String" MaxLength="1" Nullable="false"/>
+                <Property Name="Name" Type="Edm.String" MaxLength="10"/>
+            </EntityType>
+            <EntityType Name="CustomerTypeVH">
+                <Key><PropertyRef Name="Name"/></Key>
+                <Property Name="Name" Type="Edm.String" MaxLength="20" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="SalesRepVH">
+                <Key><PropertyRef Name="Name"/></Key>
+                <Property Name="Name" Type="Edm.String" MaxLength="40" Nullable="false"/>
+                <Property Name="Department" Type="Edm.String" MaxLength="40"/>
+            </EntityType>
+            <EntityType Name="PeriodVH">
+                <Key><PropertyRef Name="FiscalPeriod"/></Key>
+                <Property Name="FiscalPeriod" Type="Edm.String" MaxLength="7" Nullable="false"/>
+                <Property Name="PeriodName" Type="Edm.String" MaxLength="20"/>
+            </EntityType>
+            <EntityType Name="DraftAdministrativeData">
+                <Key>
+                    <PropertyRef Name="DraftUUID"/>
+                </Key>
+                <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12"/>
+                <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12"/>
+                <Property Name="InProcessByUser" Type="Edm.String" MaxLength="12"/>
+                <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
+            </EntityType>
+            <Action Name="approveCredit" IsBound="true">
+                <Parameter Name="_it" Type="AgencyService.Agency"/>
+                <ReturnType Type="AgencyService.Agency"/>
+            </Action>
+            <Action Name="holdCredit" IsBound="true">
+                <Parameter Name="_it" Type="AgencyService.Agency"/>
+                <ReturnType Type="AgencyService.Agency"/>
+            </Action>
+            <Action Name="terminateAgency" IsBound="true">
+                <Parameter Name="_it" Type="AgencyService.Agency"/>
+                <ReturnType Type="AgencyService.Agency"/>
+            </Action>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="AgencyService.Agency"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="AgencyService.Agency"/>
+            </Action>
+            <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="AgencyService.Agency"/>
+                <ReturnType Type="AgencyService.Agency"/>
+            </Action>
+            <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="AgencyService.Agency"/>
+                <Parameter Name="PreserveChanges" Type="Edm.Boolean"/>
+                <ReturnType Type="AgencyService.Agency"/>
+            </Action>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="AgencyService.Monthly"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="AgencyService.Monthly"/>
+            </Action>
+            <EntityContainer Name="Container">
+                <EntitySet Name="Agency" EntityType="AgencyService.Agency">
+                    <NavigationPropertyBinding Path="_Monthly" Target="Monthly"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Agency"/>
+                </EntitySet>
+                <EntitySet Name="Monthly" EntityType="AgencyService.Monthly">
+                    <NavigationPropertyBinding Path="_Agency" Target="Agency"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Monthly"/>
+                </EntitySet>
+                <EntitySet Name="StatusVH" EntityType="AgencyService.StatusVH"/>
+                <EntitySet Name="CustomerTypeVH" EntityType="AgencyService.CustomerTypeVH"/>
+                <EntitySet Name="SalesRepVH" EntityType="AgencyService.SalesRepVH"/>
+                <EntitySet Name="PeriodVH" EntityType="AgencyService.PeriodVH"/>
+            </EntityContainer>
+            <Annotations Target="AgencyService.Agency/CustomerId"><Annotation Term="Common.Label" String="고객코드"/></Annotations>
+            <Annotations Target="AgencyService.Agency/CustomerName"><Annotation Term="Common.Label" String="고객명"/></Annotations>
+            <Annotations Target="AgencyService.Agency/RepresentativeName"><Annotation Term="Common.Label" String="대표자명"/></Annotations>
+            <Annotations Target="AgencyService.Agency/StartDate"><Annotation Term="Common.Label" String="거래개시일"/></Annotations>
+            <Annotations Target="AgencyService.Agency/CustomerTypeName"><Annotation Term="Common.Label" String="고객유형"/></Annotations>
+            <Annotations Target="AgencyService.Agency/SalesTypeName"><Annotation Term="Common.Label" String="영업유형"/></Annotations>
+            <Annotations Target="AgencyService.Agency/SalesRepName"><Annotation Term="Common.Label" String="영업사원"/></Annotations>
+            <Annotations Target="AgencyService.Agency/SalesRepDepartmentName"><Annotation Term="Common.Label" String="부서"/></Annotations>
+            <Annotations Target="AgencyService.Agency/LogisticsCenter"><Annotation Term="Common.Label" String="물류센터"/></Annotations>
+            <Annotations Target="AgencyService.Agency/Address"><Annotation Term="Common.Label" String="소재지"/></Annotations>
+            <Annotations Target="AgencyService.Agency/CurrentCreditBal"><Annotation Term="Common.Label" String="현여신잔액"/></Annotations>
+            <Annotations Target="AgencyService.Agency/TotalCreditLimit"><Annotation Term="Common.Label" String="총여신한도"/></Annotations>
+            <Annotations Target="AgencyService.Agency/CurrentCollateral"><Annotation Term="Common.Label" String="담보현황"/></Annotations>
+            <Annotations Target="AgencyService.Agency/EndOfMonthBal"><Annotation Term="Common.Label" String="월말미수"/></Annotations>
+            <Annotations Target="AgencyService.Agency/OccupancyLevel"><Annotation Term="Common.Label" String="여신점유율(%)"/></Annotations>
+            <Annotations Target="AgencyService.Agency/CollateralType"><Annotation Term="Common.Label" String="담보종류"/></Annotations>
+            <Annotations Target="AgencyService.Agency/AgencyStatusName"><Annotation Term="Common.Label" String="거래상태"/></Annotations>
+            <Annotations Target="AgencyService.Agency/ReviewRequired"><Annotation Term="Common.Label" String="여신 재심사 필요"/></Annotations>
+            <Annotations Target="AgencyService.Agency/IsApproved"><Annotation Term="Common.Label" String="대리점 상태"/></Annotations>
+            <Annotations Target="AgencyService.Agency/IconUrl"><Annotation Term="Common.Label" String="유형"/></Annotations>
+            <Annotations Target="AgencyService.Agency/CollateralAmount"><Annotation Term="Common.Label" String="담보금액"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/FiscalPeriod"><Annotation Term="Common.Label" String="매출기간"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/SalesPeriodDate"><Annotation Term="Common.Label" String="매출기준일"/></Annotations>
+            <!-- 금액+통화 (ui5con2023 Flight Price+EUR 대응): 표시 시 통화 병기, 편집 시 통화 필드 분리 -->
+            <Annotations Target="AgencyService.Monthly/TotalMonthlySales"><Annotation Term="Measures.ISOCurrency" Path="CurrencyCode"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/TotalMonthlyCollection"><Annotation Term="Measures.ISOCurrency" Path="CurrencyCode"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/CurrentOutBalance"><Annotation Term="Measures.ISOCurrency" Path="CurrencyCode"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/EndOfMonthBal"><Annotation Term="Measures.ISOCurrency" Path="CurrencyCode"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/CurrencyCode"><Annotation Term="Common.Label" String="통화"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/TotalMonthlySales"><Annotation Term="Common.Label" String="월총매출액"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/TotalMonthlyCollection"><Annotation Term="Common.Label" String="월총수금액"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/CurrentOutBalance"><Annotation Term="Common.Label" String="현외매잔액"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/EndOfMonthBal"><Annotation Term="Common.Label" String="월말미수"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/RotationDays"><Annotation Term="Common.Label" String="회전일"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/RecoveryRate"><Annotation Term="Common.Label" String="수금율(%)"/></Annotations>
+            <!-- 계산 필드는 편집(생성행)에서 입력 불가 — 매출/수금 입력 시 서버(mock 핸들러)가 자동 계산 -->
+            <Annotations Target="AgencyService.Monthly/RotationDays"><Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/CurrentOutBalance"><Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/></Annotations>
+            <Annotations Target="AgencyService.Monthly/EndOfMonthBal"><Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/></Annotations>
+            <!-- VH 라벨 -->
+            <Annotations Target="AgencyService.StatusVH/Code"><Annotation Term="Common.Label" String="상태코드"/></Annotations>
+            <Annotations Target="AgencyService.StatusVH/Name"><Annotation Term="Common.Label" String="거래상태"/></Annotations>
+            <Annotations Target="AgencyService.CustomerTypeVH/Name"><Annotation Term="Common.Label" String="고객유형"/></Annotations>
+            <Annotations Target="AgencyService.SalesRepVH/Name"><Annotation Term="Common.Label" String="영업사원"/></Annotations>
+            <Annotations Target="AgencyService.SalesRepVH/Department"><Annotation Term="Common.Label" String="부서"/></Annotations>
+            <Annotations Target="AgencyService.PeriodVH/FiscalPeriod"><Annotation Term="Common.Label" String="매출기간"/></Annotations>
+            <Annotations Target="AgencyService.PeriodVH/PeriodName"><Annotation Term="Common.Label" String="기간명"/></Annotations>
+            <!-- 참고: macros:Chart(FE Chart 빌딩블록)를 실제로 렌더하려면 아래 Aggregation.ApplySupported를
+                 Monthly 엔티티에 선언하고 annotation.xml의 UI.Chart#MonthlySales ReferenceFacet을 노출한다.
+                 단, sap.chart V4 분석바인딩이 mock에서 'S/CUBE not supported'로 막히므로 데모에서는 제거하고
+                 VizFrame 컬럼차트(월간 매출 차트)로 대체. 서버(fe-mockserver) 자체는 $apply groupby/aggregate 지원함. -->
+            <!-- 거래 해지: 파괴적 액션 → FE 표준 확인 다이얼로그(IsActionCritical) + 이미 해지된 건 비활성(OperationAvailable) -->
+            <Annotations Target="AgencyService.terminateAgency(AgencyService.Agency)">
+                <Annotation Term="Common.IsActionCritical" Bool="true"/>
+                <Annotation Term="Core.OperationAvailable" Path="_it/IsNotTerminated"/>
+            </Annotations>
+            <Annotations Target="AgencyService.Container/Agency">
+                <Annotation Term="Common.DraftRoot">
+                    <Record>
+                        <PropertyValue Property="ActivationAction" String="AgencyService.draftActivate"/>
+                        <PropertyValue Property="EditAction" String="AgencyService.draftEdit"/>
+                        <PropertyValue Property="PreparationAction" String="AgencyService.draftPrepare"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="AgencyService.Container/Monthly">
+                <Annotation Term="Common.DraftNode">
+                    <Record>
+                        <PropertyValue Property="PreparationAction" String="AgencyService.draftPrepare"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

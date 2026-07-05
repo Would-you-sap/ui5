@@ -1,0 +1,240 @@
+{
+  "_version": "1.76.0",
+  "sap.app": {
+    "id": "would.you.agency",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:fpm",
+      "version": "1.20.0",
+      "toolsId": "7d05fa24-1acb-4d3c-a036-f02a0fa89c54"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_agencysales/srvd/sap/zui_agencysales/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "rootView": {
+      "viewName": "sap.fe.core.rootView.Fcl",
+      "type": "XML",
+      "async": true,
+      "id": "appRootView"
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ObjectPage.ObjectPageController#would.you.agency::AgencyDetail": {
+            "controllerName": "would.you.agency.ext.controller.AgencyObjectPage"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "minUI5Version": "1.149.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.core": {},
+        "sap.fe.templates": {},
+        "sap.f": {},
+        "sap.ui.layout": {},
+        "sap.viz": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "would.you.agency.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.f.routing.Router",
+        "flexibleColumnLayout": {
+          "defaultTwoColumnLayoutType": "TwoColumnsMidExpanded"
+        }
+      },
+      "routes": [
+        {
+          "name": "AgencyMain",
+          "pattern": ":?query:",
+          "target": ["AgencyMain"]
+        },
+        {
+          "name": "AgencyDetail",
+          "pattern": "Agency({key}):?query:",
+          "target": ["AgencyMain", "AgencyDetail"]
+        },
+        {
+          "name": "AgencyMonthly",
+          "pattern": "Agency({key})/_Monthly({key2}):?query:",
+          "target": ["AgencyMain", "AgencyDetail", "MonthlyDetail"]
+        }
+      ],
+      "targets": {
+        "AgencyMain": {
+          "type": "Component",
+          "id": "AgencyMain",
+          "name": "sap.fe.core.fpm",
+          "controlAggregation": "beginColumnPages",
+          "contextPattern": "",
+          "options": {
+            "settings": {
+              "navigation": {
+                "Agency": {
+                  "detail": {
+                    "route": "AgencyDetail"
+                  }
+                }
+              },
+              "contextPath": "/Agency",
+              "viewName": "would.you.agency.ext.main.Main"
+            }
+          }
+        },
+        "AgencyDetail": {
+          "type": "Component",
+          "id": "AgencyDetail",
+          "name": "sap.fe.templates.ObjectPage",
+          "controlAggregation": "midColumnPages",
+          "contextPattern": "/Agency({key})",
+          "options": {
+            "settings": {
+              "contextPath": "/Agency",
+              "editableHeaderContent": false,
+              "navigation": {
+                "_Monthly": {
+                  "detail": {
+                    "route": "AgencyMonthly"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_Monthly/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "creationMode": {
+                      "name": "InlineCreationRows"
+                    }
+                  }
+                },
+                "@com.sap.vocabularies.UI.v1.FieldGroup#DeepDive": {
+                  "fields": {
+                    "AgencyStatusSwitchField": {
+                      "template": "would.you.agency.ext.fragment.AgencyStatusSwitch",
+                      "label": "{i18n>agencyStatusLabel}",
+                      "position": {
+                        "placement": "Before",
+                        "anchor": "DataField::RepresentativeName"
+                      }
+                    }
+                  }
+                }
+              },
+              "content": {
+                "body": {
+                  "sections": {
+                    "MonthlySalesChart": {
+                      "template": "would.you.agency.ext.fragment.MonthlySalesChart",
+                      "title": "{i18n>monthlyChartTitle}",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "GeneralInfo"
+                      }
+                    },
+                    "MonthlyTrend": {
+                      "template": "would.you.agency.ext.fragment.Contribution",
+                      "title": "{i18n>trendSectionTitle}",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "MonthlyRanking"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "MonthlyDetail": {
+          "type": "Component",
+          "id": "MonthlyDetail",
+          "name": "sap.fe.templates.ObjectPage",
+          "controlAggregation": "endColumnPages",
+          "contextPattern": "/Agency({key})/_Monthly({key2})",
+          "options": {
+            "settings": {
+              "contextPath": "/Agency/_Monthly",
+              "editableHeaderContent": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

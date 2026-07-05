@@ -1,0 +1,24 @@
+<!-- 오버뷰 대리점 차트(여신 점유율 / 월말미수) 막대 클릭 → 해당 대리점 여신 상세 Popover. -->
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.ui.layout.form">
+    <Popover id="AgencyChartPopover" title="{agencyDetail>/CustomerName}" placement="Auto"
+        horizontalScrolling="false" verticalScrolling="false">
+        <f:SimpleForm id="AgencyChartPopoverForm" layout="ResponsiveGridLayout" editable="false" width="18rem"
+            labelSpanXL="6" labelSpanL="6" labelSpanM="6" labelSpanS="6" columnsXL="1" columnsL="1" columnsM="1"
+            class="sapUiTinyMargin">
+            <f:content>
+                <Label id="ApCreditLabel" text="{i18n>popAgencyCredit}"/>
+                <Text id="ApCreditText" text="{path: 'agencyDetail>/CurrentCreditBal', type: 'sap.ui.model.type.Integer', formatOptions: {groupingEnabled: true}} {i18n>unitKrw}"/>
+
+                <Label id="ApLimitLabel" text="{i18n>popAgencyLimit}"/>
+                <Text id="ApLimitText" text="{path: 'agencyDetail>/TotalCreditLimit', type: 'sap.ui.model.type.Integer', formatOptions: {groupingEnabled: true}} {i18n>unitKrw}"/>
+
+                <Label id="ApOccLabel" text="{i18n>popAgencyOccupancy}"/>
+                <ObjectStatus id="ApOccStatus" text="{agencyDetail>/OccupancyLevel} %"
+                    state="{= ${agencyDetail>/OccupancyLevel} >= 80 ? 'Error' : (${agencyDetail>/OccupancyLevel} >= 60 ? 'Warning' : 'Success') }"/>
+
+                <Label id="ApEomLabel" text="{i18n>popAgencyEom}"/>
+                <Text id="ApEomText" text="{path: 'agencyDetail>/EndOfMonthBal', type: 'sap.ui.model.type.Integer', formatOptions: {groupingEnabled: true}} {i18n>unitKrw}"/>
+            </f:content>
+        </f:SimpleForm>
+    </Popover>
+</core:FragmentDefinition>

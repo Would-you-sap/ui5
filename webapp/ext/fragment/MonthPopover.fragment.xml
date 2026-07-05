@@ -1,0 +1,28 @@
+<!-- ex7 대응: 월간 매출 차트 막대 클릭 시 해당 월 실적 상세 Popover
+     (ui5con2023 'Bookings for Airline ...' Popover 패턴) -->
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.ui.layout.form">
+    <Popover id="MonthPopover" title="{month>/FiscalPeriod} {i18n>monthPopoverTitle}" placement="Auto"
+        horizontalScrolling="false" verticalScrolling="false">
+        <f:SimpleForm id="MonthPopoverForm" layout="ResponsiveGridLayout" editable="false" width="18rem"
+            labelSpanXL="6" labelSpanL="6" labelSpanM="6" labelSpanS="6" columnsXL="1" columnsL="1" columnsM="1"
+            class="sapUiTinyMargin">
+            <f:content>
+                <Label id="MpSalesLabel" text="{i18n>popSales}"/>
+                <Text id="MpSalesText" text="{path: 'month>/TotalMonthlySales', type: 'sap.ui.model.type.Integer', formatOptions: {groupingEnabled: true}} {i18n>unitKrw}"/>
+
+                <Label id="MpCollLabel" text="{i18n>popCollection}"/>
+                <Text id="MpCollText" text="{path: 'month>/TotalMonthlyCollection', type: 'sap.ui.model.type.Integer', formatOptions: {groupingEnabled: true}} {i18n>unitKrw}"/>
+
+                <Label id="MpRecoveryLabel" text="{i18n>popRecovery}"/>
+                <ObjectStatus id="MpRecoveryStatus" text="{month>/RecoveryRate} %"
+                    state="{= ${month>/Critical} === 3 ? 'Success' : ${month>/Critical} === 2 ? 'Warning' : 'Error'}"/>
+
+                <Label id="MpRotationLabel" text="{i18n>popRotation}"/>
+                <Text id="MpRotationText" text="{month>/RotationDays} {i18n>popRotationUnit}"/>
+
+                <Label id="MpEomLabel" text="{i18n>popEom}"/>
+                <Text id="MpEomText" text="{path: 'month>/EndOfMonthBal', type: 'sap.ui.model.type.Integer', formatOptions: {groupingEnabled: true}} {i18n>unitKrw}"/>
+            </f:content>
+        </f:SimpleForm>
+    </Popover>
+</core:FragmentDefinition>

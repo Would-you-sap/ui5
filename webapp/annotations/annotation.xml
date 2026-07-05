@@ -1,0 +1,405 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata4/sap/zui_agencysales/srvd/sap/zui_agencysales/0001/$metadata">
+        <edmx:Include Namespace="AgencyService" Alias="SAP__self"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">
+            <!-- 대리점 유형 아이콘 (ui5con2023 AirlinePic 대응) — 목록 첫 컬럼에 아바타로 렌더 -->
+            <Annotations Target="SAP__self.Agency/IconUrl">
+                <Annotation Term="UI.IsImageURL" Bool="true"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Agency">
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>AgencyStatusName</PropertyPath>
+                        <PropertyPath>CustomerTypeName</PropertyPath>
+                        <PropertyPath>SalesTypeName</PropertyPath>
+                        <PropertyPath>SalesRepName</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="IconUrl"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="CustomerName"/>
+                            <PropertyValue Property="Criticality" Path="Critical"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="CustomerTypeName"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="AgencyStatusName"/>
+                            <PropertyValue Property="Criticality" Path="AgencyStatusCriticality"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="CurrentCreditBal"/>
+                            <PropertyValue Property="Criticality" Path="Critical"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="TotalCreditLimit"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="EndOfMonthBal"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                    </Collection>
+                    <Annotation Term="UI.Criticality" Path="Critical"/>
+                </Annotation>
+                <!-- 승인/보류는 세부정보 폼의 '대리점 상태' 스위치(IsApproved)로 이동. 헤더 액션은 해지만 유지. -->
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataFieldForAction">
+                            <PropertyValue Property="Label" String="거래 해지"/>
+                            <PropertyValue Property="Action" String="AgencyService.terminateAgency"/>
+                            <PropertyValue Property="Criticality" EnumMember="UI.CriticalityType/Negative"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="대리점"/>
+                        <PropertyValue Property="TypeNamePlural" String="대리점"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CustomerName"/></Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CustomerId"/></Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="DeepDive">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="RepresentativeName"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="StartDate"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="SalesRepName"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="LogisticsCenter"/></Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="CurrentCreditBal"/>
+                                    <PropertyValue Property="Criticality" Path="Critical"/>
+                                </Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="TotalCreditLimit"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="OccupancyLevel"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CurrentCollateral"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="EndOfMonthBal"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CollateralType"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CollateralAmount"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="ReviewRequired"/></Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="HeaderKpi">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="AgencyStatusName"/>
+                                    <PropertyValue Property="Criticality" Path="AgencyStatusCriticality"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="CurrentCreditBal"/>
+                                    <PropertyValue Property="Criticality" Path="Critical"/>
+                                </Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="TotalCreditLimit"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="OccupancyLevel"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="EndOfMonthBal"/></Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.HeaderFacets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="AgencyKpis"/>
+                            <PropertyValue Property="Label" String="여신 요약"/>
+                            <PropertyValue Property="Target" AnnotationPath="@com.sap.vocabularies.UI.v1.FieldGroup#HeaderKpi"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="GeneralInfo"/>
+                            <PropertyValue Property="Label" String="대리점 세부정보"/>
+                            <PropertyValue Property="Target" AnnotationPath="@com.sap.vocabularies.UI.v1.FieldGroup#DeepDive"/>
+                        </Record>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="MonthlyRanking"/>
+                            <PropertyValue Property="Label" String="월간 매출 현황"/>
+                            <PropertyValue Property="Target" AnnotationPath="_Monthly/@com.sap.vocabularies.UI.v1.LineItem"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Monthly">
+                <!-- UI.Chart: FE Chart 빌딩블록(macros:Chart)용 정식 어노테이션(정식 백엔드 연결용, 현재 미사용).
+                     실 분석형 OData($apply) 연결 시: (1) metadata의 Monthly에 Aggregation.ApplySupported 재선언,
+                     (2) UI.Facets에 ReferenceFacet(_Monthly/@UI.Chart#MonthlySales) 노출 → 표준 차트 렌더됨.
+                     mock(fe-mockserver)에서는 sap.chart V4 분석바인딩이 'S/CUBE not supported'로 막혀
+                     데모에선 VizFrame 컬럼차트(월간 매출 차트 커스텀 섹션)로 대체. -->
+                <Annotation Term="UI.Chart" Qualifier="MonthlySales">
+                    <Record Type="UI.ChartDefinitionType">
+                        <PropertyValue Property="Title" String="월별 매출·수금"/>
+                        <PropertyValue Property="ChartType" EnumMember="UI.ChartType/Column"/>
+                        <PropertyValue Property="Dimensions">
+                            <Collection>
+                                <PropertyPath>FiscalPeriod</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Measures">
+                            <Collection>
+                                <PropertyPath>TotalMonthlySales</PropertyPath>
+                                <PropertyPath>TotalMonthlyCollection</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.DataPoint" Qualifier="RecoveryProgress">
+                    <Record Type="UI.DataPointType">
+                        <PropertyValue Property="Value" Path="RecoveryRate"/>
+                        <PropertyValue Property="TargetValue" Decimal="100"/>
+                        <PropertyValue Property="Visualization" EnumMember="UI.VisualizationType/Progress"/>
+                        <PropertyValue Property="Criticality" Path="Critical"/>
+                    </Record>
+                </Annotation>
+                <!-- ex6 패턴: DataPoint를 MeasureAttributes로 참조하는 #Donut 차트 → 테이블 컬럼에 래디얼 마이크로차트 렌더 -->
+                <Annotation Term="UI.Chart" Qualifier="RecoveryDonut">
+                    <Record Type="UI.ChartDefinitionType">
+                        <PropertyValue Property="Title" String="수금율"/>
+                        <PropertyValue Property="ChartType" EnumMember="UI.ChartType/Donut"/>
+                        <PropertyValue Property="Measures">
+                            <Collection><PropertyPath>RecoveryRate</PropertyPath></Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="MeasureAttributes">
+                            <Collection>
+                                <Record Type="UI.ChartMeasureAttributeType">
+                                    <PropertyValue Property="Measure" PropertyPath="RecoveryRate"/>
+                                    <PropertyValue Property="Role" EnumMember="UI.ChartMeasureRoleType/Axis1"/>
+                                    <PropertyValue Property="DataPoint" AnnotationPath="@com.sap.vocabularies.UI.v1.DataPoint#RecoveryProgress"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="SalesPeriodDate"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="TotalMonthlySales"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="TotalMonthlyCollection"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataFieldForAnnotation">
+                            <PropertyValue Property="Label" String="수금율(%)"/>
+                            <PropertyValue Property="Target" AnnotationPath="@com.sap.vocabularies.UI.v1.Chart#RecoveryDonut"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="RotationDays"/>
+                        </Record>
+                    </Collection>
+                    <Annotation Term="UI.Criticality" Path="Critical"/>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="월간 매출"/>
+                        <PropertyValue Property="TypeNamePlural" String="월간 매출"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField"><PropertyValue Property="Value" Path="FiscalPeriod"/></Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CustomerId"/></Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <!-- 월실적 하위 상세 페이지 (ui5con2023 Booking 오브젝트 페이지 대응) -->
+                <Annotation Term="UI.FieldGroup" Qualifier="MonthlyDetail">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="SalesPeriodDate"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="FiscalPeriod"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="TotalMonthlySales"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="TotalMonthlyCollection"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CurrentOutBalance"/></Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="EndOfMonthBal"/></Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="RecoveryRate"/>
+                                    <PropertyValue Property="Criticality" Path="Critical"/>
+                                </Record>
+                                <Record Type="UI.DataField"><PropertyValue Property="Value" Path="RotationDays"/></Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="MonthlyDetailInfo"/>
+                            <PropertyValue Property="Label" String="월간 실적 상세"/>
+                            <PropertyValue Property="Target" AnnotationPath="@com.sap.vocabularies.UI.v1.FieldGroup#MonthlyDetail"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <!-- ===== 값 도움말 (ui5con2023 마스터데이터 VH 대응) ===== -->
+            <Annotations Target="SAP__self.Agency/AgencyStatusName">
+                <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="CollectionPath" String="StatusVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="AgencyStatusName"/>
+                                    <PropertyValue Property="ValueListProperty" String="Name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Agency/CustomerTypeName">
+                <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="CollectionPath" String="CustomerTypeVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="CustomerTypeName"/>
+                                    <PropertyValue Property="ValueListProperty" String="Name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Agency/SalesRepName">
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="CollectionPath" String="SalesRepVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="SalesRepName"/>
+                                    <PropertyValue Property="ValueListProperty" String="Name"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Department"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Monthly/FiscalPeriod">
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="CollectionPath" String="PeriodVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="FiscalPeriod"/>
+                                    <PropertyValue Property="ValueListProperty" String="FiscalPeriod"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PeriodName"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <!-- 매출/수금 입력 시 서버 계산 필드(수금율·회전일·신호등·미수) 재조회 -->
+            <Annotations Target="SAP__self.Monthly">
+                <Annotation Term="Common.SideEffects" Qualifier="MonthlyCalc">
+                    <Record Type="Common.SideEffectsType">
+                        <PropertyValue Property="SourceProperties">
+                            <Collection>
+                                <PropertyPath>TotalMonthlySales</PropertyPath>
+                                <PropertyPath>TotalMonthlyCollection</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="TargetProperties">
+                            <Collection>
+                                <String>RecoveryRate</String>
+                                <String>RotationDays</String>
+                                <String>Critical</String>
+                                <String>CurrentOutBalance</String>
+                                <String>EndOfMonthBal</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.approveCredit(SAP__self.Agency)">
+                <Annotation Term="com.sap.vocabularies.Common.v1.SideEffects">
+                    <Record>
+                        <PropertyValue Property="TargetProperties">
+                            <Collection>
+                                <String>_it/AgencyStatus</String>
+                                <String>_it/AgencyStatusName</String>
+                                <String>_it/AgencyStatusCriticality</String>
+                                <String>_it/IsApproved</String>
+                                <String>_it/IsNotTerminated</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.holdCredit(SAP__self.Agency)">
+                <Annotation Term="com.sap.vocabularies.Common.v1.SideEffects">
+                    <Record>
+                        <PropertyValue Property="TargetProperties">
+                            <Collection>
+                                <String>_it/AgencyStatus</String>
+                                <String>_it/AgencyStatusName</String>
+                                <String>_it/AgencyStatusCriticality</String>
+                                <String>_it/IsApproved</String>
+                                <String>_it/IsNotTerminated</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.terminateAgency(SAP__self.Agency)">
+                <Annotation Term="com.sap.vocabularies.Common.v1.SideEffects">
+                    <Record>
+                        <PropertyValue Property="TargetProperties">
+                            <Collection>
+                                <String>_it/AgencyStatus</String>
+                                <String>_it/AgencyStatusName</String>
+                                <String>_it/AgencyStatusCriticality</String>
+                                <String>_it/IsApproved</String>
+                                <String>_it/IsNotTerminated</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

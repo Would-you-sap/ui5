@@ -1,0 +1,17 @@
+node_modules/
+dist/
+dist_*/
+.env
+*.log
+.DS_Store
+Thumbs.db
+.scp/
+mta_archives/
+mta-*
+resources/
+archive.zip
+.*_mta_build_tmp
+# 로컬 도구 상태(절대 커밋 금지)
+.uz4sap/
+**/.uz4sap/
+.vscode/settings.json
