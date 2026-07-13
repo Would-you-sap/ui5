@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko"><head><style id="qw-theme">:root {
+  --color-bg: #faf9fc;
+  --color-text: #131920;
+  --color-navbar-bg: #f9f9fb;
+  --color-bg-chat-view: #fcfcfd;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f9fafb;
+  --color-bg-hover: #f3f4f6;
+  --color-surface: #f9fafb;
+  --color-surface-hover: #f3f4f6;
+  --color-surface-active: #e5e7eb;
+  --color-border: rgba(0, 0, 0, .12);
+  --color-border-light: rgba(0, 0, 0, .06);
+  --color-border-strong: #d1d5db;
+  --color-primary: #4200db;
+  --color-primary-dark: #35009e;
+  --color-primary-light: #8575ff;
+  --color-primary-bg: #e8e6ff;
+  --color-primary-hover-border: #35009e;
+  --color-nav-icon-active: #4200db;
+  --color-nav-hover-border: #4200db;
+  --color-primary-alpha-3: color-mix(in srgb, #4200db 3%, transparent);
+  --color-primary-alpha-5: color-mix(in srgb, #4200db 5%, transparent);
+  --color-primary-alpha-8: color-mix(in srgb, #4200db 8%, transparent);
+  --color-primary-alpha-12: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-alpha-15: color-mix(in srgb, #4200db 15%, transparent);
+  --color-primary-alpha-20: color-mix(in srgb, #4200db 20%, transparent);
+  --color-primary-alpha-25: color-mix(in srgb, #4200db 25%, transparent);
+  --color-primary-alpha-30: color-mix(in srgb, #4200db 30%, transparent);
+  --color-primary-alpha-40: color-mix(in srgb, #4200db 40%, transparent);
+  --color-primary-alpha-50: color-mix(in srgb, #4200db 50%, transparent);
+  --color-primary-alpha-60: color-mix(in srgb, #4200db 60%, transparent);
+  --color-primary-subtle: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-border: color-mix(in srgb, #4200db 30%, transparent);
+  --color-focus-ring: color-mix(in srgb, #4200db 50%, transparent);
+  --color-sidebar-hover: color-mix(in srgb, #4200db 12%, transparent);
+  --color-accent: #4200db;
+  --color-accent-foreground: #4200db;
+  --color-accent-dark: #35009e;
+  --color-accent-light: #e8e6ff;
+  --color-accent-inverse: #ffffff;
+  --color-link: #4200db;
+  --color-primary-gradient-end: #e8e6ff;
+  --color-primary-bg-solid: #e8e6ff;
+  --color-user-bubble: #F3F3F7;
+  --color-user-bubble-text: #131920;
+  --color-text-secondary: #5e5e5e;
+  --color-text-tertiary: #656871;
+  --color-text-muted: #9ca3af;
+  --color-text-on-primary: #ffffff;
+  --color-success: #00802f;
+  --color-success-dark: #00471e;
+  --color-success-light: #d9ffd6;
+  --color-success-hover: #005c26;
+  --color-success-bg: #e6f5eb;
+  --color-success-border: #b3d9bf;
+  --color-success-foreground: #00802f;
+  --color-success-dark-foreground: #00471e;
+  --color-success-text: #00471e;
+  --color-error: #db0000;
+  --color-error-dark: #700000;
+  --color-error-light: #ffe0e0;
+  --color-error-hover: #ffe0e0;
+  --color-error-bg: #fceaea;
+  --color-error-border: #f2cccc;
+  --color-error-active-border: #db0000;
+  --color-error-foreground: #db0000;
+  --color-error-dark-foreground: #700000;
+  --color-error-inverse: #ffffff;
+  --color-error-text: #700000;
+  --color-warning: #f2b100;
+  --color-warning-dark: #573a00;
+  --color-warning-light: #fffbbd;
+  --color-warning-hover: #db9200;
+  --color-warning-bg: #fef7e6;
+  --color-warning-border: #f9dfa3;
+  --color-warning-foreground: #f2b100;
+  --color-warning-dark-foreground: #573a00;
+  --color-warning-inverse: #573a00;
+  --color-surface-warning: #fffbbd;
+  --color-text-warning: #573a00;
+  --color-info: #006ce0;
+  --color-info-dark: #002a66;
+  --color-info-light: #d1f1ff;
+  --color-info-hover: #003b8f;
+  --color-info-bg: #ebf3fc;
+  --color-info-border: #b3d1f0;
+  --color-info-foreground: #006ce0;
+  --color-info-dark-foreground: #002a66;
+  --color-info-inverse: #ffffff;
+  --color-overlay: rgba(0, 0, 0, .5);
+  --color-shadow: rgba(0, 0, 0, .08);
+  --color-hover: rgba(0, 0, 0, .05);
+  --color-tooltip-bg: rgba(0, 0, 0, .85);
+  --color-tooltip-text: #ffffff;
+  --color-voice-purple: #8575ff;
+  --color-voice-purple-dark: #4200db;
+  --color-voice-purple-light: #8575ff;
+  --color-voice-red: #db0000;
+  --color-voice-red-dark: #700000;
+  --color-voice-amber: #f2b100;
+  --color-voice-purple-glow: rgba(66, 0, 219, .4);
+  --color-voice-red-glow: rgba(219, 0, 0, .4);
+  --font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+  --text-2xs: .5625rem;
+  --text-xs: .625rem;
+  --text-sm: .6875rem;
+  --text-base: .75rem;
+  --text-md: .8125rem;
+  --text-lg: .875rem;
+  --text-xl: 1rem;
+  --text-2xl: 1.125rem;
+  --text-3xl: 1.25rem;
+  --text-4xl: 1.5rem;
+  --text-5xl: 2rem;
+  --spacing-1: calc(.25rem * 1);
+  --spacing-1-5: calc(.25rem * 1.5);
+  --spacing-2: calc(.25rem * 2);
+  --spacing-3: calc(.25rem * 3);
+  --spacing-4: calc(.25rem * 4);
+  --spacing-5: calc(.25rem * 5);
+  --spacing-6: calc(.25rem * 6);
+  --spacing-7: calc(.25rem * 7);
+  --spacing-8: calc(.25rem * 8);
+  --spacing-9: calc(.25rem * 9);
+  --spacing-10: calc(.25rem * 10);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-card: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 8px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, .08);
+  --color-success-bg-solid: #d9ffd6;
+  --color-error-bg-solid: #ffe0e0;
+  --color-error-border-solid: #ffe0e0;
+  --color-warning-bg-solid: #fffbbd;
+  --color-warning-text: #573a00;
+  --color-info-bg-solid: #d1f1ff;
+  --color-info-bg-solid-alt: #d1f1ff;
+  --color-info-text: #002a66;
+  --color-info-text-alt: #002a66;
+  --color-emerald: #10b981;
+  --color-teal: #4ecdc4;
+  --color-code-bg: #F3F3F7;
+  --color-code-header-bg: #f1f3f5;
+  --color-code-text: #24292e;
+  --color-code-border: #e1e4e8;
+  --color-code-muted: #6a737d;
+  --color-inline-code-bg: #F3F3F7;
+  --color-inline-code-text: #24292e;
+  --color-inline-code-border: #e1e4e8;
+  --color-scrollbar-thumb: #d1d5db;
+  --color-scrollbar-track: transparent;
+  --color-graph-node-text: #333333;
+  --color-graph-node-text-dim: #7F8C8D;
+  --color-graph-edge-default: #95A5A6;
+  --color-graph-edge-cross: #E67E22;
+  --color-graph-edge-text: #666666;
+  --color-graph-edge-stroke: #ffffff;
+  --color-graph-highlight-bg: #FF6B6B;
+  --color-graph-highlight-border: #E74C3C;
+  --color-graph-search-bg: #FFD700;
+  --color-graph-search-border: #FFA500;
+  --color-graph-focus-border: #C0392B;
+  --color-graph-external-border: #95A5A6;
+  --color-graph-cat-file: #3498DB;
+  --color-graph-cat-folder: #7F8C8D;
+  --color-graph-cat-file-aggregate: #2980B9;
+  --color-graph-cat-class: #9B59B6;
+  --color-graph-cat-function: #2ECC71;
+  --color-graph-cat-method: #1ABC9C;
+  --color-graph-cat-variable: #F39C12;
+  --color-graph-cat-import: #D35400;
+  --color-graph-cat-module: #5B6ABF;
+  --color-graph-cat-concept: #E74C3C;
+  --color-graph-cat-person: #FF6B6B;
+  --color-graph-cat-org: #4ECDC4;
+  --color-graph-cat-organization: #4ECDC4;
+  --color-graph-cat-product: #A29BFE;
+  --color-graph-cat-metric: #FD79A8;
+  --color-graph-cat-location: #34495E;
+  --color-graph-cat-date: #E056A0;
+  --color-graph-cat-code: #3498DB;
+  --color-graph-cat-doc: #7F8C8D;
+  --color-graph-cat-url: #00B894;
+  --color-graph-cat-email: #6C5CE7;
+  --color-graph-cat-unknown: #BDC3C7;
+  --color-graph-rel-contains: #BDC3C7;
+  --color-graph-rel-extends: #9B59B6;
+  --color-graph-rel-implements: #3498DB;
+  --color-graph-rel-imports: #E67E22;
+  --color-graph-rel-uses: #2ECC71;
+  --color-graph-rel-calls: #27AE60;
+  --color-graph-rel-references: #F39C12;
+  --color-graph-rel-related-to: #95A5A6;
+  --color-graph-rel-works-on: #E74C3C;
+  --color-graph-rel-owns: #1ABC9C;
+  --color-graph-rel-depends-on: #E67E22;
+  --color-graph-rel-parent-of: #BDC3C7;
+  --qs-content: #fff;
+  --qs-main: #fff;
+  --qs-primary-foreground: #131920;
+  --qs-secondary-foreground: #656871;
+  --qs-tertiary-foreground: #9ca3af;
+  --qs-placeholder-foreground: #8c8c94;
+  --qs-divider: #dedee3;
+  --qs-default-border: #8c8c94;
+  --qs-neutral-soft: #b4b4bb;
+  --qs-neutral-gray-50: #f9fafb;
+  --qs-tertiary-background: #f9fafb;
+  --qs-action-hover: #f3f3f7;
+  --qs-primary-default: #4200db;
+  --qs-primary-dark: #35009e;
+  --qs-primary-light: #e8e6ff;
+  --qs-success-default: #00802f;
+  --qs-error-default: #db0000;
+  --qs-font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --qs-font-family: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --qs-font-base-letter-spacing: .15px;
+  --qs-shadow-sm: 0 0 2px 0 #00000029, 0 0 4px 0 #00000029;
+  --qs-shadow-md: 0 0 2px 0 #00000029, 0 2px 8px 1px #00000029;
+  --qs-shadow-lg: 0 4px 16px 4px #00000029, 0 2px 6px 1px #00000029;
+  --qs-shadow-xl: 0 4px 8px 2px #00000029, 0 6px 20px 4px #00000029;
+  --qs-width-modal-sm: 384px;
+  --qs-width-modal-md: 600px;
+  --qs-width-modal-lg: 1136px;
+  --qs-grid-gap: 16px;
+  --qs-grid-gap-xl: 24px;
+  --qs-primary-medium: #8575ff;
+  --qs-primary-inverse: #fff;
+  --qs-neutral-lightest: #f9f9fb;
+  --qs-neutral-light: #f3f3f7;
+  --qs-neutral-default: #dedee3;
+  --qs-neutral-medium: #8c8c94;
+  --qs-neutral-deep: #656871;
+  --qs-neutral-dark: #333843;
+  --qs-neutral-strong: #131920;
+  --qs-neutral-white: #fff;
+  --qs-neutral-black: #000;
+  --qs-success-medium: #005c26;
+  --qs-success-dark: #00471e;
+  --qs-success-light: #d9ffd6;
+  --qs-success-inverse: #fff;
+  --qs-info-default: #006ce0;
+  --qs-info-medium: #003b8f;
+  --qs-info-dark: #002a66;
+  --qs-info-light: #d1f1ff;
+  --qs-info-inverse: #fff;
+  --qs-warning-default: #f2b100;
+  --qs-warning-medium: #db9200;
+  --qs-warning-dark: #573a00;
+  --qs-warning-light: #fffbbd;
+  --qs-warning-inverse: #573a00;
+  --qs-warning-experimental: #f2b100;
+  --qs-warning-experimental-light: #fffbbd;
+  --qs-warning-experimental-light-foreground: #fffbbd;
+  --qs-error-medium: #900;
+  --qs-error-dark: #700000;
+  --qs-error-light: #ffe0e0;
+  --qs-error-inverse: #fff;
+  --qs-connection-default: #db3300;
+  --qs-connection-soft: #ff997a;
+  --qs-connection-light: #ffe0d6;
+  --qs-connection-dark: #661800;
+  --qs-automation-default: #b3008f;
+  --qs-automation-medium: #d600ba;
+  --qs-automation-soft: #ff94f1;
+  --qs-automation-light: #ffe0fb;
+  --qs-automation-dark: #660052;
+  --qs-insight-default: #a000b8;
+  --qs-insight-soft: #f299ff;
+  --qs-insight-light: #fce6ff;
+  --qs-insight-dark: #590066;
+  --qs-visualization-default: #7300e5;
+  --qs-visualization-soft: #d4a8ff;
+  --qs-visualization-light: #f2e5ff;
+  --qs-visualization-dark: #45008a;
+  --qs-spice: #ff9800;
+  --qs-coachmark: #006ce0;
+  --qs-brand: #fff;
+  --qs-brand-foreground: #131920;
+  --qs-brand-navbar: #131920;
+  --qs-brand-navbar-foreground: #fff;
+  --qs-brand-navbar-light: #dedee3;
+  --qs-brand-navbar-dark: #000;
+  --qs-application-navbar: #4200db;
+  --qs-application-navbar-foreground: #fff;
+  --qs-application-navbar-light: #e8e6ff;
+  --qs-application-navbar-dark: #35009e;
+  --qs-dimension: #4200db;
+  --qs-dimension-foreground: #fff;
+  --qs-dimension-experimental: #4200db;
+  --qs-dimension-experimental-foreground: #4200db;
+  --qs-measure: #00802f;
+  --qs-measure-foreground: #fff;
+  --qs-measure-experimental: #f2b100;
+  --qs-measure-experimental-foreground: #f2b100;
+  --qs-content-inverse: #333843;
+  --qs-content-inverse-active: #131920;
+  --qs-secondary: #dedee3;
+  --qs-disabled: #8c8c94;
+  --qs-divider-light: #f3f3f7;
+  --qs-hover-border: #333843;
+  --qs-active-border: #4200db;
+  --qs-disabled-border: #dedee3;
+  --qs-error-border: #ffe0e0;
+  --qs-error-active-border: #db0000;
+  --qs-disabled-foreground: #b4b4bb;
+  --qs-primary-inverse-foreground: #fff;
+  --qs-error-foreground: #db0000;
+  --qs-contrast-foreground: #131920;
+  --qs-main-foreground: #131920;
+  --qs-main-secondary-foreground: #656871;
+  --qs-action-disabled: #f3f3f7;
+  --qs-action-active: #e8e6ff;
+  --qs-default-badge: #dedee3;
+  --qs-tag-default: #dedee3;
+  --qs-tag-soft-border: #b4b4bb;
+  --qs-focus-offset: 1px;
+  --qs-toggle-tile-sm: calc(.25rem * 8);
+  --qs-toggle-tile-md: calc(.25rem * 12);
+  --qs-toggle-tile-lg: calc(.25rem * 15);
+  --qs-shadow-pin-right: inset 4px 0 4px -4px #00000029;
+  --qs-shadow-pin-left: inset -4px 0 4px -4px #00000029;
+  --react-pdf-text-layer: 1;
+  --highlight-bg-color: rgba(180, 0, 170, 1);
+  --highlight-selected-bg-color: rgba(0, 100, 0, 1);
+  --react-pdf-annotation-layer: 1;
+  --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+  --input-focus-border-color: Highlight;
+  --input-focus-outline: 1px solid Canvas;
+  --input-unfocused-border-color: transparent;
+  --input-disabled-border-color: transparent;
+  --input-hover-border-color: black;
+  --link-outline: none;
+  color-scheme: light;
+}
+body { background: var(--color-bg); color: var(--color-text); }
+a { color: var(--color-link, var(--color-primary)); }</style>
+<meta charset="UTF-8">
+<title>SAP FI/CO 재무 대시보드</title>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/highcharts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@12.1.2/modules/accessibility.js"></script>
+<style>
+  :root {
+    --color-bg: #ffffff; --color-bg-secondary: #f4f5f7; --color-surface: #ffffff; --color-surface-hover: rgba(0,0,0,0.03);
+    --color-text: #172b4d; --color-text-secondary: #44546f; --color-text-muted: #8993a4;
+    --color-border-light: #ebecf0; --color-border: #dfe1e6;
+    --color-primary: #0052CC; --color-success: #36b37e; --color-success-bg: #e3fcef; --color-success-text: #006644;
+    --color-error: #de350b; --color-warning: #ff991f; --color-info: #0065ff;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; --font-mono: 'SF Mono', Consolas, monospace;
+    --radius-md: 8px; --radius-pill: 100px;
+  }
+  body { background: var(--color-bg); font-family: var(--font-sans); color: var(--color-text); margin: 0; padding: 24px; }
+  .header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0; }
+  .subtitle { color: var(--color-text-muted); font-size: 13px; margin: 2px 0 20px; }
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--color-success-bg); color: var(--color-success-text); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: var(--radius-pill); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-success); }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .card { background: var(--color-bg-secondary); border: 1px solid var(--color-border-light); border-radius: var(--radius-md); padding: 18px 20px; }
+  .card-label { color: var(--color-text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .card-value { color: var(--color-text); font-size: 26px; font-weight: 600; font-family: var(--font-mono); margin-top: 6px; }
+  .card-sub { color: var(--color-text-secondary); font-size: 12px; margin-top: 4px; }
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media (max-width: 720px) { .chart-grid { grid-template-columns: 1fr; } }
+  .chart-card { background: var(--color-bg-secondary); border: 1px solid var(--color-border-light); border-radius: var(--radius-md); padding: 16px; }
+  .chart-title { font-size: 14px; font-weight: 600; margin: 0 0 8px 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--color-text-muted); font-weight: 500; padding: 10px 12px; border-bottom: 1px solid var(--color-border); }
+  td { padding: 10px 12px; color: var(--color-text); border-bottom: 1px solid var(--color-border-light); }
+  td.num { font-family: var(--font-mono); text-align: right; }
+  .pos { color: var(--color-success); } .neg { color: var(--color-error); }
+  tr:hover td { background: var(--color-surface-hover); }
+  .footer { color: var(--color-text-muted); font-size: 11px; margin-top: 14px; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>💰 SAP FI/CO 재무 대시보드</h1>
+    <span class="live-badge"><span class="dot"></span> ACDOCA</span>
+  </div>
+  <p class="subtitle">Universal Journal (ACDOCA) · 회사코드 KUS1 · 회계연도 2025 · via ADT MCP</p>
+
+  <div class="kpi-grid">
+    <div class="card"><div class="card-label">총 전표 라인</div><div class="card-value" id="k-lines">0</div><div class="card-sub">라인아이템</div></div>
+    <div class="card"><div class="card-label">총 차변 활동</div><div class="card-value" id="k-debit">0</div><div class="card-sub">KRW (전기금액)</div></div>
+    <div class="card"><div class="card-label">활성 G/L 계정</div><div class="card-value" id="k-accts">0</div><div class="card-sub">계정 수</div></div>
+    <div class="card"><div class="card-label">최다 활동 기간</div><div class="card-value" id="k-peak" style="font-size:20px;">-</div><div class="card-sub" id="k-peak-amt">-</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><p class="chart-title">월별 전기 활동 추이 (차변, KRW)</p><div id="chart-month" style="height: 300px;"></div></div>
+    <div class="chart-card"><p class="chart-title">계정 유형별 금액 구성</p><div id="chart-type" style="height: 300px;"></div></div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:20px;">
+    <p class="chart-title">금액 상위 계정 (G/L Account, 잔액 기준)</p>
+    <div id="chart-top" style="height: 340px;"></div>
+  </div>
+
+  <div class="card">
+    <p class="chart-title">계정별 상세 (상위 12)</p>
+    <table>
+      <thead><tr><th>G/L 계정</th><th style="text-align:right">순잔액 (KRW)</th><th style="text-align:right">라인 수</th><th>구분</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <p class="footer">데이터 출처: SAP S/4HANA · Universal Journal ACDOCA · 집계 조회 (개별 PII 미포함)</p>
+
+  <script>
+    const D = {
+      total_lines: 2061, total_debit: 15134656, num_accounts: 48,
+      months: [
+        {period:3, amount:1464972, cnt:69},{period:4, amount:21805, cnt:15},{period:6, amount:160, cnt:1},
+        {period:7, amount:512006, cnt:92},{period:8, amount:2576344, cnt:272},{period:9, amount:1006609, cnt:131},
+        {period:10, amount:32677, cnt:70},{period:11, amount:2660417, cnt:124},{period:12, amount:6859664, cnt:300}
+      ],
+      types: [
+        {type:"자산 (Assets)", amount:10532742, cnt:1148},{type:"기타손익 (Other P&L)", amount:3042235, cnt:88},
+        {type:"매출 (Revenue)", amount:2348883, cnt:302},{type:"부채/자본 (Liab/Equity)", amount:2230908, cnt:86},
+        {type:"비용 (Expenses)", amount:1791683, cnt:281},{type:"결산/집계 (Closing)", amount:1421123, cnt:156}
+      ],
+      top_accounts: [
+        {racct:"0000160000", amount:-5850685.25, cnt:327},{racct:"0000300000", amount:2337430.65, cnt:287},
+        {racct:"0000140000", amount:2251378.39, cnt:121},{racct:"0000792000", amount:1732200.00, cnt:30},
+        {racct:"0000283000", amount:-1466286.33, cnt:20},{racct:"0000800000", amount:-1376460.65, cnt:118},
+        {racct:"0000400000", amount:1277206.05, cnt:148},{racct:"0000132000", amount:1200000.00, cnt:2},
+        {racct:"0000799999", amount:-1000000.00, cnt:1},{racct:"0000233000", amount:695524.05, cnt:8},
+        {racct:"0000790000", amount:309997.43, cnt:56},{racct:"0000191100", amount:-224480.11, cnt:381}
+      ]
+    };
+    const nf = n => Highcharts.numberFormat(n, 0, '.', ',');
+    const monthName = p => p + '월';
+    const cleanAcct = a => a.replace(/^0+/, '');
+    document.getElementById('k-lines').textContent = nf(D.total_lines);
+    document.getElementById('k-debit').textContent = nf(D.total_debit);
+    document.getElementById('k-accts').textContent = D.num_accounts;
+    const peak = [...D.months].sort((a,b)=>b.amount-a.amount)[0];
+    document.getElementById('k-peak').textContent = monthName(peak.period);
+    document.getElementById('k-peak-amt').textContent = nf(peak.amount) + ' KRW';
+    document.getElementById('tbody').innerHTML = D.top_accounts.map(a => {
+      const cls = a.amount >= 0 ? 'pos' : 'neg'; const label = a.amount >= 0 ? '차변성' : '대변성';
+      return `<tr><td style="font-family:var(--font-mono)">${cleanAcct(a.racct)}</td><td class="num ${cls}">${nf(a.amount)}</td><td class="num">${a.cnt}</td><td>${label}</td></tr>`;
+    }).join('');
+    const st = getComputedStyle(document.documentElement);
+    const get = v => st.getPropertyValue(v).trim() || null;
+    const txt = get('--color-text-secondary'), muted = get('--color-text-muted'), grid = get('--color-border-light');
+    const primary = get('--color-primary'), success = get('--color-success'), error = get('--color-error');
+    const warning = get('--color-warning'), info = get('--color-info');
+    const surface = get('--color-surface'), border = get('--color-border'), tcolor = get('--color-text');
+    const tt = { backgroundColor: surface, borderColor: border, style: { color: tcolor } };
+    Highcharts.chart('chart-month', {
+      chart: { type: 'column', backgroundColor: 'transparent', style: { fontFamily: get('--font-sans') } },
+      title: { text: null },
+      xAxis: { categories: D.months.map(m=>monthName(m.period)), labels: { style: { color: txt } }, lineColor: grid },
+      yAxis: { title: { text: 'KRW', style: { color: muted } }, labels: { style: { color: txt }, formatter: function(){ return nf(this.value); } }, gridLineColor: grid },
+      tooltip: Object.assign({ pointFormat: '전기금액: <b>{point.y:,.0f} KRW</b>' }, tt),
+      plotOptions: { column: { color: primary, borderRadius: 3 } },
+      series: [{ name: '차변 전기금액', data: D.months.map(m=>m.amount) }],
+      legend: { enabled: false }, credits: { enabled: false },
+    });
+    const typeColors = [primary, warning, success, info, error, muted];
+    Highcharts.chart('chart-type', {
+      chart: { type: 'pie', backgroundColor: 'transparent', style: { fontFamily: get('--font-sans') } },
+      title: { text: null },
+      tooltip: Object.assign({ pointFormat: '<b>{point.y:,.0f} KRW</b> ({point.percentage:.1f}%)' }, tt),
+      plotOptions: { pie: { innerSize: '58%', dataLabels: { enabled: true, style: { color: txt, textOutline: 'none', fontSize: '11px' }, format: '{point.name}<br>{point.percentage:.0f}%' }, borderWidth: 2, borderColor: surface } },
+      series: [{ name: '금액', colorByPoint: true, data: D.types.map((t,i)=>({ name: t.type, y: t.amount, color: typeColors[i % typeColors.length] })) }],
+      legend: { enabled: false }, credits: { enabled: false },
+    });
+    Highcharts.chart('chart-top', {
+      chart: { type: 'bar', backgroundColor: 'transparent', style: { fontFamily: get('--font-sans') } },
+      title: { text: null },
+      xAxis: { categories: D.top_accounts.map(a=>cleanAcct(a.racct)), labels: { style: { color: txt } }, lineColor: grid },
+      yAxis: { title: { text: '순잔액 (KRW)', style: { color: muted } }, labels: { style: { color: txt }, formatter: function(){ return nf(this.value); } }, gridLineColor: grid, plotLines: [{ value: 0, color: border, width: 1 }] },
+      tooltip: Object.assign({ pointFormat: '순잔액: <b>{point.y:,.0f} KRW</b>' }, tt),
+      plotOptions: { bar: { dataLabels: { enabled: true, formatter: function(){ return nf(this.y); }, style: { color: txt, fontSize: '10px' } }, negativeColor: error, color: success } },
+      series: [{ name: '순잔액', data: D.top_accounts.map(a=>a.amount) }],
+      legend: { enabled: false }, credits: { enabled: false },
+    });
+  </script>
+
+
+</body></html>
