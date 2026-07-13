@@ -128,6 +128,38 @@
   .sheet pre .good{color:var(--ok)}
   .sheet pre .dim{color:var(--ink-faint)}
 
+  /* chat session log */
+  .chatlog{margin:1.8rem 0;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;
+    box-shadow:0 12px 34px -20px rgba(16,24,40,.4)}
+  .cl-head{display:flex;align-items:center;gap:.7rem;padding:.55rem .95rem;
+    background:linear-gradient(180deg,#F7F9FC,#EDF1F7);border-bottom:1px solid var(--line)}
+  .cl-dots{display:flex;gap:6px}
+  .cl-dots i{width:11px;height:11px;border-radius:50%;display:block}
+  .cl-dots i:nth-child(1){background:#FF5F57}.cl-dots i:nth-child(2){background:#FEBC2E}.cl-dots i:nth-child(3){background:#28C840}
+  .cl-title{font-family:var(--mono);font-size:13px;font-weight:700;color:#2C3340}
+  .cl-body{padding:1rem 1.05rem;display:flex;flex-direction:column;gap:.7rem;background:#FBFCFE}
+  .cl-row{display:flex;gap:.5rem;align-items:flex-end}
+  .cl-row.agent{justify-content:flex-start}
+  .cl-row.user{flex-direction:row-reverse}
+  .cl-av{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:800;font-family:var(--mono)}
+  .cl-av.agent{background:#E7ECF6;color:var(--accent-deep)}
+  .cl-av.user{background:var(--accent);color:#fff}
+  .cl-bubble{max-width:76%;padding:.6rem .85rem;border-radius:14px;font-size:14.5px;line-height:1.6}
+  .cl-bubble.agent{background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px;color:#232830}
+  .cl-bubble.user{background:var(--accent);color:#fff;border-bottom-right-radius:5px}
+  .cl-bubble code{font-family:var(--mono);font-size:.88em;background:var(--accent-wash);color:var(--accent-deep);
+    padding:.05em .35em;border-radius:4px;border:0}
+  .cl-bubble.user code{background:rgba(255,255,255,.22);color:#fff}
+  .cl-bubble.user strong{color:#fff}
+  .cl-act{margin-top:.1rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:baseline;padding:.6rem .85rem;
+    background:#0F1B2D;border-radius:10px;color:#D4DEEC;font-size:13.5px;line-height:1.55}
+  .cl-act-tag{flex:none;font-family:var(--mono);font-size:11px;font-weight:700;color:#7FE0A3;letter-spacing:.02em}
+  .cl-act-body{flex:1;min-width:12rem}
+  .cl-act code{font-family:var(--mono);font-size:.9em;background:rgba(255,255,255,.1);color:#9FE7FF;
+    padding:.05em .35em;border-radius:4px;border:0}
+  .cl-act strong{color:#F0F5FC}
+
   /* interactive demo box */
   .demo{margin:2rem 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);
     box-shadow:0 2px 4px rgba(20,24,35,.04),0 14px 40px rgba(20,24,35,.08)}
@@ -285,21 +317,19 @@ Quick 클라우드 <span class="dim">⇄</span> Quick 데스크탑 <span class="
   <div class="wrap">
     <div class="eyebrow"><span class="num">03</span><span>여정</span></div>
     <h2>첫 조회에서 손익계산서까지</h2>
-    <p>연결이 됐으니 이제 대화만 남았다. 데모용 테스트 서비스의 작은 조회로 연결을 검증하고, 곧바로 실제 재무 데이터로 확장했다. 아래는 그날 저녁 Quick과 주고받은 여정의 압축이다 — 모든 단계의 입력은 자연어였다.</p>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>단계</th><th>요청 (자연어)</th><th>Quick이 한 일</th></tr></thead>
-        <tbody>
-          <tr><td><b>연결 검증</b></td><td>“SAP와 연동해서 대시보드 만들 수 있나요?”</td><td>연동 경로 3안 제시 → 커넥터 부재 확인 → MCP 등록 안내</td></tr>
-          <tr><td><b>첫 조회</b></td><td>(MCP 등록 완료 후)</td><td>도구 174개 점검 → 테스트 서비스(<code>ZC_UZ_STUDENT</code>)의 CDS 구조를 스스로 파악 → 학생 3건 조회 → 첫 대시보드</td></tr>
-          <tr><td><b>실데이터 확장</b></td><td>“FI/CO 실제 데이터로 확장”</td><td>표준 재무 뷰 탐색 → <code>ACDOCA</code> 접근 시도 → <b>서버 차단 목록에 저지됨</b> → 조회 방식을 역으로 질문</td></tr>
-          <tr><td><b>승인 후 집계</b></td><td>“집계 조회로 승인”</td><td>개인정보 없는 집계만 조회 · 32개 회사코드/연도 조합 스캔 → 데이터 최다 조합(FY2025, 2,061라인) 선택 → 재무 대시보드</td></tr>
-          <tr><td><b>P&amp;L 재구성</b></td><td>“손익 뷰로 재구성”</td><td>계정유형(P/N) 분리 · SAP 부호 규약(차변/대변) 반영 → 수익 2,960,512 / 비용 2,434,439 / 순손익 +526,073 산출</td></tr>
-          <tr><td><b>산출물 저장</b></td><td>“전부 HTML로 저장해줘”</td><td>독립 실행형 HTML 4종 + 대화 기록 문서 생성</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>가장 인상적이었던 순간은 “실데이터 확장” 단계다. Quick이 <code>ACDOCA</code>(Universal Journal — 회계 전표의 심장)를 조회하려 하자, <strong>MCP 서버의 차단 목록이 작동해 요청이 막혔다.</strong> Quick은 우회하려 들지 않았다. 대신 “집계 방식으로 조회할지” 사용자에게 물었고, 승인 후에도 개별 레코드가 아닌 집계만 가져갔다. AI의 자율성과 시스템의 통제가 충돌 없이 맞물린 장면이었다.</p>
+    <p>연결이 됐으니 이제 대화만 남았다. 데모용 테스트 서비스의 작은 조회로 연결을 검증하고, 곧바로 실제 재무 데이터로 확장했다. 아래는 그날 저녁 Quick과 실제로 주고받은 대화의 압축이다 — 모든 단계의 입력은 자연어였다.</p>
+
+    <div class="chatlog"><div class="cl-head"><span class="cl-dots"><i></i><i></i><i></i></span><span class="cl-title">💬 세션 로그 1 — 시작</span></div><div class="cl-body"><div class="cl-row user"><div class="cl-av user">나</div><div class="cl-bubble user">“SAP 시스템과 연동해서 데이터를 읽어서 대시보드로 구현해줄 수 있나요?”</div></div><div class="cl-row agent"><div class="cl-av agent">AI</div><div class="cl-bubble agent">“가능합니다. 방식은 <strong>①실시간 직접 연동 ②파일 기반 ③중간 API/DB 경유</strong>로 갈립니다. 어떤 데이터를 보고 싶으신가요?”</div></div><div class="cl-act"><span class="cl-act-tag">▷ 진행된 것</span><span class="cl-act-body">실시간 직접 연동 + 매출/재무(FI/CO) 선택 → 세션에 SAP 커넥터 부재 확인 → <strong>커스텀 MCP 경로</strong> 제안.</span></div></div></div>
+
+    <div class="chatlog"><div class="cl-head"><span class="cl-dots"><i></i><i></i><i></i></span><span class="cl-title">💬 세션 로그 2 — MCP 등록</span></div><div class="cl-body"><div class="cl-row user"><div class="cl-av user">나</div><div class="cl-bubble user">“혹시 제가 Claude Code로 구현한 MCP 서버 사용이 가능할까요? ADT MCP입니다.”</div></div><div class="cl-row agent"><div class="cl-av agent">AI</div><div class="cl-bubble agent">“네, 사용자 MCP 서버 등록 방식으로 가능합니다. 실행 방식(stdio)과 진입점을 알려주시면 등록값을 정리해 드리겠습니다.”</div></div><div class="cl-act"><span class="cl-act-tag">▷ 진행된 것</span><span class="cl-act-body">User MCP(stdio) 등록 → <strong>Connected · 도구 174개</strong> 인식 (<code>GetSqlQuery</code> · <code>GetTableContents</code> · <code>SearchObject</code> …).</span></div></div></div>
+
+    <div class="chatlog"><div class="cl-head"><span class="cl-dots"><i></i><i></i><i></i></span><span class="cl-title">💬 세션 로그 3 — 첫 조회, 연결 검증</span></div><div class="cl-body"><div class="cl-row user"><div class="cl-av user">나</div><div class="cl-bubble user">“등록 완료, 연결 정상입니다.”</div></div><div class="cl-row agent"><div class="cl-av agent">AI</div><div class="cl-bubble agent">“노출된 도구를 점검하고, 테스트 서비스의 기반 CDS 뷰를 찾아 시험 조회하겠습니다.” → “<strong>실시간 연동 성공!</strong> <code>ZC_UZ_STUDENT</code> 뷰에서 3건을 읽었습니다. 이 데이터로 첫 대시보드를 만들겠습니다.”</div></div><div class="cl-act"><span class="cl-act-tag">▷ SAP에서 실행된 것</span><span class="cl-act-body"><code>SearchObject('ZSTUDENT*')</code> → 서비스 정의·CDS 구조를 스스로 파악 → 데이터 조회 → KPI·차트·테이블 대시보드 생성.</span></div></div></div>
+
+    <div class="chatlog"><div class="cl-head"><span class="cl-dots"><i></i><i></i><i></i></span><span class="cl-title">💬 세션 로그 4 — 차단, 그리고 승인</span></div><div class="cl-body"><div class="cl-row user"><div class="cl-av user">나</div><div class="cl-bubble user">“FI/CO 실제 데이터로 확장해 주세요.”</div></div><div class="cl-row agent"><div class="cl-av agent">AI</div><div class="cl-bubble agent">“표준 재무 뷰를 탐색해 <code>ACDOCA</code>를 조회하려 했으나, <strong>MCP 서버의 보호 목록(blocklist)에 막혔습니다.</strong> 개인정보가 연결될 수 있는 거래 데이터입니다. 개별 레코드 없이 집계 방식으로만 조회할까요?”</div></div><div class="cl-row user"><div class="cl-av user">나</div><div class="cl-bubble user">“집계 조회로 승인합니다.”</div></div><div class="cl-act"><span class="cl-act-tag">▷ SAP에서 실행된 것</span><span class="cl-act-body"><code>GetSqlQuery</code>(집계 전용) → 32개 회사코드/연도 조합 스캔 → 데이터 최다 조합(FY2025 · <strong>2,061라인</strong>) 선택 → FI/CO 재무 대시보드.</span></div></div></div>
+
+    <p>이 네 번째 로그가 그날의 하이라이트다. Quick은 차단을 우회하려 들지 않았다. 막힌 이유를 설명하고, 허용 가능한 대안(집계)을 제시하고, 승인을 기다렸다. <strong>AI의 자율성과 시스템의 통제가 충돌 없이 맞물린 장면</strong>이었다 — 이 통제 구조는 <a href="#s5">§05</a>에서 자세히 다룬다.</p>
+
+    <div class="chatlog"><div class="cl-head"><span class="cl-dots"><i></i><i></i><i></i></span><span class="cl-title">💬 세션 로그 5 — 손익계산서, 그리고 저장</span></div><div class="cl-body"><div class="cl-row user"><div class="cl-av user">나</div><div class="cl-bubble user">“P&amp;L 손익 뷰로 재구성해 주세요.”</div></div><div class="cl-row agent"><div class="cl-av agent">AI</div><div class="cl-bubble agent">“계정유형(<code>GLAccountType</code>)으로 손익 계정(P/N)만 분리하고, SAP 부호 규약(대변=수익·차변=비용)을 반영해 산출하겠습니다.” → “총수익 2,960,512 · 총비용 2,434,439 · <strong>순손익 +526,073 (순이익률 17.8%)</strong>입니다.”</div></div><div class="cl-row user"><div class="cl-av user">나</div><div class="cl-bubble user">“지금까지 만든 대시보드 모두 HTML 파일로 저장해 주세요.”</div></div><div class="cl-act"><span class="cl-act-tag">▷ SAP에서 실행된 것</span><span class="cl-act-body">손익 집계 쿼리 → P&amp;L 대시보드 → 독립 실행형 <strong>HTML 4종 + 대화 기록 문서</strong> 저장. 세션 종료.</span></div></div></div>
   </div>
 </section>
 
